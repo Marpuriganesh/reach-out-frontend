@@ -18,6 +18,8 @@ function RouterRoutes(): JSX.Element {
           element={<PageMain path={location.pathname} />}
         />
 
+        <Route path='/lo/lo' element={<NotFound />}/>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
