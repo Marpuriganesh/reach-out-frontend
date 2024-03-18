@@ -444,10 +444,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@reach-out/ui-library@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.1.4.tgz#60b77a3f15e37933e0b47f7f62bfb2515e585588"
-  integrity sha512-hWv4dRpmty56+OjfefkRvlbRttsoS6ZWlW/tWRY/Wxnxtpv9hzPQQMFRmFD7f5uqltjjfM4Whs55pa6dN9vWig==
+"@reach-out/ui-library@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.2.1.tgz#64146aa0c8bb63bb8a96a252c8608ebb4f611dbe"
+  integrity sha512-G3PSWzG5quU2KTSvZqufExBW3hoqIySFTvi6Wkk5OifSkDVsOXRORn+Thovf/vYUw9nXmmg/+v29Ye2Ectkjmw==
   dependencies:
     framer-motion "^11.0.8"
     lodash.throttle "^4.1.1"

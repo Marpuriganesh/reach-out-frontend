@@ -5,6 +5,7 @@ import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -13,6 +14,39 @@ function LoginSignin() {
   const isLogined = useSelector((state) => state.auth.isLogined);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleInputUsername = (value) => {
+    setUsername(value);
+  };
+
+  const handleInputPassword = (value) => {
+    setPassword(value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const requestData = {
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      client_secret: import.meta.env.VITE_CLIENT_SECRET,
+      grant_type: "password",
+      username: username,
+      password: password
+  };
+
+  axios.post('https://api.reach-out.in/auth/token', requestData, {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+      console.log('Response:', response.data);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+
+  }
 
   // const [isChecked, setIsChecked] = useState(false);
 
@@ -83,17 +117,20 @@ function LoginSignin() {
           opacity: 0,
           transition: { duration: 0.6, delay: 0.2 },
         }}
+        onSubmit={handleSubmit}
       >
         <CustomInput
           type="text"
           placeholder="Username"
           className="input_text"
-        ></CustomInput>
+          exportInputValue={handleInputUsername}
+        />
         <CustomInput
           type="password"
           placeholder="Password"
           className="input_text"
-        ></CustomInput>
+          exportInputValue={handleInputPassword}
+        />
         <motion.button
           initial={{ scale: 1.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
