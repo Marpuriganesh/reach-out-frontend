@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import "./css files/LoginSignin.scss";
 import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
-import { Link } from "react-router-dom";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
 
-function LoginSignin(props) {
+function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [path,setPath] = useState('/');

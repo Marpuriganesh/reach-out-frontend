@@ -25,7 +25,7 @@ function PageMain(props: PageProps): JSX.Element {
             <AnimatePresence mode="wait">
                 <motion.div key={renderPage}>
                     {renderPage === '/login' && (
-                        <LoginSignin path={props.path} />
+                        <LoginSignin  />
                     )}
                     {renderPage === '/' && (
                         <Home />
