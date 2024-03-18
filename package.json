@@ -13,6 +13,10 @@
   "dependencies": {
     "@reach-out/ui-library": "^1.1.4",
     "@reduxjs/toolkit": "^2.2.1",
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^20.11.28",
+    "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^11.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

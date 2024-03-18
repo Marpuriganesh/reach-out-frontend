@@ -4,11 +4,15 @@ import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
   const [isActive, setIsActive] = useState(false);
-  const [path,setPath] = useState('/');
+  const [path, setPath] = useState("/");
+  const isLogined = useSelector((state) => state.auth.isLogined);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   // const [isChecked, setIsChecked] = useState(false);
 
@@ -42,11 +46,11 @@ function LoginSignin() {
     setScrollDisabled(!scrollDisabled);
   }
 
- 
-
   const formSingup = (
     <>
-      <div className="signin" onClick={()=>setPath('/')}>test</div>
+      <div className="signin" onClick={() => setPath("/")}>
+        test
+      </div>
     </>
   );
 
@@ -104,6 +108,29 @@ function LoginSignin() {
     </>
   );
 
+  const login_sigin = (
+    <div className={`page-container ${isActive ? "transition" : ""}`}>
+      <div className={`container ${path === "/signin" ? "flip" : ""}`}>
+        <AnimatePresence>
+          <motion.div key={path} className="motion-div">
+            {path === "/signin" ? formSingup : formLogin}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
+      {waveConfigs.map((config, index) => (
+        <AnimatedWave
+          key={index} // Remember to provide a unique key for each component in the array
+          phase={config.phase}
+          amplitude={config.amplitude}
+          speed={config.speed}
+          frequency={config.frequency}
+          className={`wave${index + 1}`} // Append index value to "wave"
+        />
+      ))}
+    </div>
+  );
+
   return (
     <motion.div
       initial={{ y: "-100%" }}
@@ -112,27 +139,7 @@ function LoginSignin() {
       exit={{ y: "-100%", transition: { duration: 0.4 } }}
     >
       <NavBar className="nav-bar" />
-
-      <div className={`page-container ${isActive ? "transition" : ""}`}>
-        <div className={`container ${path === "/signin" ? "flip" : ""}`}>
-          <AnimatePresence>
-            <motion.div key={path} className="motion-div">
-              {path === "/signin" ? formSingup : formLogin}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
-        {waveConfigs.map((config, index) => (
-          <AnimatedWave
-            key={index} // Remember to provide a unique key for each component in the array
-            phase={config.phase}
-            amplitude={config.amplitude}
-            speed={config.speed}
-            frequency={config.frequency}
-            className={`wave${index + 1}`} // Append index value to "wave"
-          />
-        ))}
-      </div>
+      {isLogined ? <div>dasbord</div> : login_sigin}
     </motion.div>
   );
 }
