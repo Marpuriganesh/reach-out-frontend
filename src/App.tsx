@@ -13,11 +13,6 @@ function App(): JSX.Element {
           path="/login"
           element={<PageMain path={'/login'} />}
         />
-        <Route
-          path="/signin"
-          element={<PageMain path={'/signin'} />}
-        />
-
         <Route path="*" element={<NotFound />}/>
 
   

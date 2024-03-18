@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 function LoginSignin(props) {
   const [scrollDisabled, setScrollDisabled] = useState(true);
   const [isActive, setIsActive] = useState(false);
+  const [path,setPath] = useState('/');
 
   // const [isChecked, setIsChecked] = useState(false);
 
@@ -46,7 +47,7 @@ function LoginSignin(props) {
 
   const formSingup = (
     <>
-      <div className="signin">test</div>
+      <div className="signin" onClick={()=>setPath('/')}>test</div>
     </>
   );
 
@@ -97,9 +98,9 @@ function LoginSignin(props) {
         >
           Log in
         </motion.button>
-        <Link to="/signin" className="a">
+        <span className="a" onClick={() => setPath("/signin")}>
           Sign in
-        </Link>
+        </span>
       </motion.form>
     </>
   );
@@ -114,10 +115,10 @@ function LoginSignin(props) {
       <NavBar className="nav-bar" />
 
       <div className={`page-container ${isActive ? "transition" : ""}`}>
-        <div className={`container ${props.path === "/signin" ? "flip" : ""}`}>
+        <div className={`container ${path === "/signin" ? "flip" : ""}`}>
           <AnimatePresence>
-            <motion.div key={props.path} className="motion-div">
-              {props.path === "/signin" ? formSingup : formLogin}
+            <motion.div key={path} className="motion-div">
+              {path === "/signin" ? formSingup : formLogin}
             </motion.div>
           </AnimatePresence>
         </div>

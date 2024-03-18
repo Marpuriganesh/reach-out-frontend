@@ -8,12 +8,12 @@ type PageProps = {
 }
 
 function PageMain(props: PageProps): JSX.Element {
-    const [renderPage, setRenderPage] = useState<'/' | '/login' | '/signin'>(props.path === '/' ? '/' : '/login');
+    const [renderPage, setRenderPage] = useState<'/' | '/login' >(props.path === '/' ? '/' : '/login');
 
     useEffect(() => {
         if (props.path === '/') {
             setRenderPage('/');
-        } else if (props.path === '/login' || props.path === '/signin') {
+        } else if (props.path === '/login') {
             setRenderPage('/login');
         } else {
             setRenderPage('/');
