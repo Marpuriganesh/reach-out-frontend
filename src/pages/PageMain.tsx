@@ -2,32 +2,30 @@ import LoginSignin from "./LoginSignin";
 import Home from "./Home";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-type PageProps = {
-    path: string;
-}
-
-function PageMain(props: PageProps): JSX.Element {
-    const [renderPage, setRenderPage] = useState<'/' | '/login' >(props.path === '/' ? '/' : '/login');
+function PageMain(): JSX.Element {
+    const location = useLocation();
+    const [renderPage, setRenderPage] = useState<'/home' | '/' >(location.pathname === '/home' ? '/home' : '/');
 
     useEffect(() => {
-        if (props.path === '/') {
+        if (location.pathname === '/home') {
+            setRenderPage('/home');
+        } else if (location.pathname === '/') {
             setRenderPage('/');
-        } else if (props.path === '/login') {
-            setRenderPage('/login');
         } else {
-            setRenderPage('/');
+            setRenderPage('/home');
         }
-    }, [props.path]);
+    }, [location.pathname]);
 
     return (
         <>
             <AnimatePresence mode="wait">
                 <motion.div key={renderPage}>
-                    {renderPage === '/login' && (
-                        <LoginSignin  />
-                    )}
                     {renderPage === '/' && (
+                        <LoginSignin/>
+                    )}
+                    {renderPage === '/home' && (
                         <Home />
                     )}
                 </motion.div>

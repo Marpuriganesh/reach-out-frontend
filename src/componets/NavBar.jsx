@@ -13,7 +13,7 @@ function NavBar(props) {
     <nav className={className}>
       <img alt='' src={ReachOutLogoH} id='logo'/>
     <li>
-    <Link to='/' title='How this works?' className='a'>ⓘ</Link>
+    <Link to='/home' title='How this works?' className='a'>ⓘ</Link>
     </li>
     
     </nav>

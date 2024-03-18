@@ -8,7 +8,7 @@ function NotFound() {
     <div className="page-container">
 
   
-        <EmotionButton emotion_value={"😢"} className={""} useLabel={false}/>
+        <EmotionButton emotion_value={"😢"} className={""} useLabel={false} setValue={100}/>
 
         <h2>404 Error: Page Not Found</h2>
         <p>The page you are looking for does not exist.</p>

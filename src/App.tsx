@@ -8,10 +8,10 @@ function App(): JSX.Element {
   return (
     <BrowserRouter basename="/">
       <Routes>
-        <Route path="/" element={<PageMain path={'/'} />} />
+        <Route path="/home" element={<PageMain />} />
         <Route
-          path="/login"
-          element={<PageMain path={'/login'} />}
+          path="/"
+          element={<PageMain />}
         />
         <Route path="*" element={<NotFound />}/>
 
