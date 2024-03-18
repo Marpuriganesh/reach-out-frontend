@@ -1,7 +1,6 @@
 import {Link} from 'react-router-dom';
 import {motion} from 'framer-motion';
 function Home() {
-  console.log(import.meta.env.VITE_TEST_KEY)
   return (
     <motion.div
     initial={{ y:"100vh"}}
