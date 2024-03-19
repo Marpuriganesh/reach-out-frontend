@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector,useDispatch } from "react-redux";
 import { login,logout } from "../auth_state/authSlice";
 import axios from "axios";
+import {ScaleLoader} from 'react-spinners';
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -15,6 +16,7 @@ function LoginSignin() {
   const isLogined = useSelector((state) => state.auth.isLogined);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loadSpinner,setLoadSpinner] = useState(false);
   const dispatch = useDispatch();
 
   const handleInputUsername = (value) => {
@@ -26,36 +28,40 @@ function LoginSignin() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
 
-    const requestData = {
-      client_id: import.meta.env.VITE_CLIENT_ID,
-      client_secret: import.meta.env.VITE_CLIENT_SECRET,
-      grant_type: "password",
-      username: username,
-      password: password
-  };
+          e.preventDefault();
 
-  axios.post('https://api.reach-out.in/auth/token', requestData, {
-    headers: {
-        'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-      console.log('Response:', response.data);
-      console.log('Access Token:', response.data.access_token);
-      console.log('Refresh Token:', response.data.refresh_token);
-      const login_data = {
-        user:username,
-        auth_token:response.data.access_token,
-        refresh_token:response.data.refresh_token,
-        expires_in:response.data.expires_in
-      }
-      dispatch(login(login_data))
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
+          setLoadSpinner(true);
+
+          const requestData = {
+            client_id: import.meta.env.VITE_CLIENT_ID,
+            client_secret: import.meta.env.VITE_CLIENT_SECRET,
+            grant_type: "password",
+            username: username,
+            password: password
+        };
+
+        axios.post('https://api.reach-out.in/auth/token', requestData, {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+            console.log('Response:', response.data);
+            console.log('Access Token:', response.data.access_token);
+            console.log('Refresh Token:', response.data.refresh_token);
+            const login_data = {
+              user:username,
+              auth_token:response.data.access_token,
+              refresh_token:response.data.refresh_token,
+              expires_in:response.data.expires_in
+            }
+            dispatch(login(login_data))
+        })
+        .catch(error => {
+            setLoadSpinner(false)
+            console.error('Error:', error.response.data);
+        });
 
   }
 
@@ -118,6 +124,11 @@ function LoginSignin() {
         transition={{ delay: 0.1, duration: 0.4 }}
         exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
       ></motion.div>
+      
+      
+        {(loadSpinner&&(<motion.div className="loading-spinner" >
+          <ScaleLoader color="#ffffff" />
+        </motion.div>))}
 
       <motion.form
         initial={{ y: -250, opacity: 0 }}
@@ -128,8 +139,12 @@ function LoginSignin() {
           opacity: 0,
           transition: { duration: 0.6, delay: 0.2 },
         }}
+
+        className={(loadSpinner?'form':'')}
+        
         onSubmit={handleSubmit}
       >
+        
         <CustomInput
           type="text"
           placeholder="Username"
