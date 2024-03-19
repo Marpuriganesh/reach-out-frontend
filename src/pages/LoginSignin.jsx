@@ -173,6 +173,14 @@ function LoginSignin() {
   );
 
   const login_sigin = (
+    <>
+    <motion.div
+      initial={{ y: "-100%" }}
+      animate={{ y: "0%" }}
+      transition={{ duration: 0.5 }}
+      exit={{ y: "-100%", transition: { duration: 0.4 } }}
+    >
+      <NavBar className="nav-bar" />
     <div className={`page-container ${isActive ? "transition" : ""}`}>
       <div className={`container ${path === "/signin" ? "flip" : ""}`}>
         <AnimatePresence>
@@ -193,23 +201,19 @@ function LoginSignin() {
         />
       ))}
     </div>
+    </motion.div>
+    </>
   );
 
   return (
-    <motion.div
-      initial={{ y: "-100%" }}
-      animate={{ y: "0%" }}
-      transition={{ duration: 0.5 }}
-      exit={{ y: "-100%", transition: { duration: 0.4 } }}
-    >
-      <NavBar className="nav-bar" />
-      {isLogined ? (
+    <>
+    {isLogined ? (
         <>
         <div>dasbord | </div>
         <button onClick={()=>dispatch(logout())}>Sign_out</button>
         </>
       ) : login_sigin}
-    </motion.div>
+    </>
   );
 }
 
