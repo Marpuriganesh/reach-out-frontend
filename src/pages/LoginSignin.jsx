@@ -206,14 +206,17 @@ function LoginSignin() {
   );
 
   return (
-    <>
-    {isLogined ? (
+    <AnimatePresence>
+      <motion.div key={isLogined}>
+      {isLogined ? (
         <>
         <div>dasbord | </div>
         <button onClick={()=>dispatch(logout())}>Sign_out</button>
         </>
       ) : login_sigin}
-    </>
+      </motion.div>
+    
+    </AnimatePresence>
   );
 }
 
