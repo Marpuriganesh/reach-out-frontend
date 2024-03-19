@@ -43,9 +43,9 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
   catch (error)
   {
     console.error('Error parsing decrypted data:');
-    return { user: null, isLogined: false, auth_token: null , refresh_token: null };
+    return { user: null, isLogined: false, auth_token: null , refresh_token: null,expires_in:null };
   }
-})() : { user: null, isLogined: false,auth_token: null , refresh_token: null };
+})() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -55,6 +55,7 @@ export const authSlice = createSlice({
             state.user = action.payload.user;
             state.auth_token = action.payload.auth_token;
             state.refresh_token = action.payload.refresh_token;
+            state.expires_in = Date.now()+action.payload.expires_in* 1000;
             state.isLogined = true;
             // Save state to local storage
             localStorage.setItem('authState', encryptData(JSON.stringify(state)));

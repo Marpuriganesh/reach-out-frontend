@@ -4,7 +4,8 @@ import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { login,logout } from "../auth_state/authSlice";
 import axios from "axios";
 
 function LoginSignin() {
@@ -14,6 +15,7 @@ function LoginSignin() {
   const isLogined = useSelector((state) => state.auth.isLogined);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleInputUsername = (value) => {
     setUsername(value);
@@ -41,6 +43,15 @@ function LoginSignin() {
   })
   .then(response => {
       console.log('Response:', response.data);
+      console.log('Access Token:', response.data.access_token);
+      console.log('Refresh Token:', response.data.refresh_token);
+      const login_data = {
+        user:username,
+        auth_token:response.data.access_token,
+        refresh_token:response.data.refresh_token,
+        expires_in:response.data.expires_in
+      }
+      dispatch(login(login_data))
   })
   .catch(error => {
       console.error('Error:', error);
@@ -176,7 +187,12 @@ function LoginSignin() {
       exit={{ y: "-100%", transition: { duration: 0.4 } }}
     >
       <NavBar className="nav-bar" />
-      {isLogined ? <div>dasbord</div> : login_sigin}
+      {isLogined ? (
+        <>
+        <div>dasbord | </div>
+        <button onClick={()=>dispatch(logout())}>Sign_out</button>
+        </>
+      ) : login_sigin}
     </motion.div>
   );
 }
