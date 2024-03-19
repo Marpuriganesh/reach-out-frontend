@@ -56,6 +56,7 @@ function LoginSignin() {
               refresh_token:response.data.refresh_token,
               expires_in:response.data.expires_in
             }
+            setLoadSpinner(false)
             dispatch(login(login_data))
         })
         .catch(error => {
