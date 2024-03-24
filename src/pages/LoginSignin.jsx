@@ -206,8 +206,9 @@ function LoginSignin() {
   );
 
   return (
+    <motion.div exit={{ y: "-100%", transition: { duration: 0.4 } }}>
     <AnimatePresence>
-      <motion.div key={isLogined}>
+      <motion.div key={isLogined} >
       {isLogined ? (
         <>
         <div>dasbord | </div>
@@ -217,6 +218,7 @@ function LoginSignin() {
       </motion.div>
     
     </AnimatePresence>
+    </motion.div>
   );
 }
 
