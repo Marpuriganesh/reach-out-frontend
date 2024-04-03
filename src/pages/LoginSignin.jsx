@@ -5,7 +5,7 @@ import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector,useDispatch } from "react-redux";
-import { login,logout } from "../auth_state/authSlice";
+import { login,logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
 import {ScaleLoader} from 'react-spinners';
 
@@ -14,6 +14,8 @@ function LoginSignin() {
   const [isActive, setIsActive] = useState(false);
   const [path, setPath] = useState("/");
   const isLogined = useSelector((state) => state.auth.isLogined);
+  const refresh_token = useSelector((state) => state.auth.refresh_token);
+  const auth_token = useSelector((state) => state.auth.auth_token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loadSpinner,setLoadSpinner] = useState(false);
@@ -212,7 +214,7 @@ function LoginSignin() {
       {isLogined ? (
         <>
         <div>dasbord | </div>
-        <button onClick={()=>dispatch(logout())}>Sign_out</button>
+        <button onClick={()=>dispatch(logoutAsync(refresh_token,auth_token))}>Sign_out</button>
         </>
       ) : login_sigin}
       </motion.div>

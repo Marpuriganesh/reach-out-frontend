@@ -1,8 +1,9 @@
 
 
 import { createSlice } from "@reduxjs/toolkit";
-
+import axios from "axios";
 import CryptoJS from 'crypto-js';
+import { Dispatch } from 'redux';
 
 // Secret key for encryption/decryption (should be kept secure)
 const SECRET_KEY = import.meta.env.VITE_STORAGE_SECRET_KEY as string;
@@ -61,10 +62,12 @@ export const authSlice = createSlice({
             localStorage.setItem('authState', encryptData(JSON.stringify(state)));
         },
         logout: (state) => {
-            state.user = null;
-            state.isLogined = false;
-            // Clear state from local storage
-            localStorage.removeItem('authState');
+          state.user = null;
+          state.isLogined = false;
+          state.auth_token = null;
+          state.refresh_token = null;
+          state.expires_in = null;
+          localStorage.removeItem('authState');
         }
     }
 });
@@ -74,3 +77,37 @@ export const { login, logout } = authSlice.actions;
 const authReducers = authSlice.reducer;
 
 export default authReducers;
+
+export const revokeToken = (refreshToken:string,authToken:string) => {
+  const revokeOptions = {
+      method: 'post',
+      url: import.meta.env.VITE_REVOKE_URL,
+      headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+      },
+      data: {
+          client_id: import.meta.env.VITE_CLIENT_ID,
+          client_secret: import.meta.env.VITE_CLIENT_SECRET,
+          token: refreshToken
+      }
+  };
+
+  return axios.request(revokeOptions);
+};
+
+// Logout action creator with async logic
+export const logoutAsync = (refreshToken:string,authToken:string) => (dispatch:Dispatch) => {
+  // Revoke token before logging out
+  revokeToken(refreshToken,authToken)
+      .then(response => {
+          console.log(response.data);
+          // After revoking the token, dispatch logout action
+          dispatch(logout());
+      })
+      .catch(error => {
+          console.error('Error revoking token:', error);
+          // Even if token revoke fails, still dispatch logout action
+          dispatch(logout());
+      });
+};
