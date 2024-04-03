@@ -39,7 +39,12 @@ const persistedState = localStorage.getItem('authState');
 const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (() => {
   try
   {
-    return JSON.parse(decryptData(persistedState));
+    const data = JSON.parse(decryptData(persistedState));
+    if (data.expires_in < Date.now())
+    {
+      return { user: null, isLogined: false, auth_token: null , refresh_token: null,expires_in:null };
+    }
+    return data;
   }
   catch (error)
   {
@@ -47,6 +52,9 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
     return { user: null, isLogined: false, auth_token: null , refresh_token: null,expires_in:null };
   }
 })() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
+
+
+
 
 export const authSlice = createSlice({
     name: 'auth',
