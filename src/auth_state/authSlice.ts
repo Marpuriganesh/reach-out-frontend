@@ -76,8 +76,11 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
         return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
       });
     }
-    console.log('Token not expired, using persisted state...');
-    return data;
+    else
+    {
+      console.log('Token not expired, using persisted state...');
+      return data;
+    }
   }
   catch (error)
   {
