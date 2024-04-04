@@ -45,7 +45,7 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
       console.log('Token expired, refreshing...');
       const requestOptions = {
         method: 'post',
-      url: import.meta.env.VITE_REVOKE_URL,
+      url: import.meta.env.VITE_TOKEN_URL,
       headers: {
           'Content-Type': 'application/json',
       },
