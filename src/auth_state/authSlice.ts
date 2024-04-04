@@ -52,6 +52,7 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
       data: {
           client_id: import.meta.env.VITE_CLIENT_ID,
           client_secret: import.meta.env.VITE_CLIENT_SECRET,
+          grant_type: "refresh_token",
           refresh_token: data.refresh_token
       }
 
