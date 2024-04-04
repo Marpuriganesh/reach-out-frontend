@@ -54,7 +54,7 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
           refresh_token: data.refresh_token
         }
       };
-
+  
       // Return a Promise from the outer function
       return axios.request(requestOptions)
         .then(response => {
@@ -63,10 +63,12 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
           data.auth_token = response.data.access_token;
           data.refresh_token = response.data.refresh_token;
           data.expires_in = Date.now() + response.data.expires_in * 1000;
-
+          // Set isLogined to true after successful token refresh
+          data.isLogined = true;
+  
           // Save updated state to local storage
           localStorage.setItem('authState', encryptData(JSON.stringify(data)));
-
+  
           // Return the modified data object
           return data;
         })
@@ -77,12 +79,15 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
         });
     } else {
       console.log('Token not expired, using persisted state...');
+      // Set isLogined to true when using persisted state
+      data.isLogined = true;
       return data;
     }
   } catch (error) {
     console.error('Error parsing decrypted data:', error);
     return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
   }
+  
 
 })() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
 
