@@ -37,57 +37,53 @@ const persistedState = localStorage.getItem('authState');
 
 
 const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (() => {
-  try
-  {
+  try {
     const data = JSON.parse(decryptData(persistedState));
-    if (data.expires_in < Date.now())
-    {
+    if (data.expires_in < Date.now()) {
       console.log('Token expired, refreshing...');
       const requestOptions = {
         method: 'post',
-      url: import.meta.env.VITE_TOKEN_URL,
-      headers: {
+        url: import.meta.env.VITE_TOKEN_URL,
+        headers: {
           'Content-Type': 'application/json',
-      },
-      data: {
+        },
+        data: {
           client_id: import.meta.env.VITE_CLIENT_ID,
           client_secret: import.meta.env.VITE_CLIENT_SECRET,
           grant_type: "refresh_token",
           refresh_token: data.refresh_token
-      }
+        }
+      };
 
-      }
-      axios.request(requestOptions)
-      .then(response => {
-        console.log('Refreshed token:', response.data);
-        // Update tokens in the state
-        data.auth_token = response.data.access_token;
-        data.refresh_token = response.data.refresh_token;
-        data.expires_in = Date.now() + response.data.expires_in * 1000;
+      // Return a Promise from the outer function
+      return axios.request(requestOptions)
+        .then(response => {
+          console.log('Refreshed token:', response.data);
+          // Update tokens in the state
+          data.auth_token = response.data.access_token;
+          data.refresh_token = response.data.refresh_token;
+          data.expires_in = Date.now() + response.data.expires_in * 1000;
 
-        // Save updated state to local storage
-        localStorage.setItem('authState', encryptData(JSON.stringify(data)));
+          // Save updated state to local storage
+          localStorage.setItem('authState', encryptData(JSON.stringify(data)));
 
-        // Return the modified data object
-        return data;
-      })
-      .catch(error => {
-        console.error('Error refreshing token:', error);
-        // Handle token refresh failure here
-        return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
-      });
-    }
-    else
-    {
+          // Return the modified data object
+          return data;
+        })
+        .catch(error => {
+          console.error('Error refreshing token:', error);
+          // Handle token refresh failure here
+          throw error; // Throw the error to be caught by the outer catch block
+        });
+    } else {
       console.log('Token not expired, using persisted state...');
       return data;
     }
+  } catch (error) {
+    console.error('Error parsing decrypted data:', error);
+    return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
   }
-  catch (error)
-  {
-    console.error('Error parsing decrypted data:');
-    return { user: null, isLogined: false, auth_token: null , refresh_token: null,expires_in:null };
-  }
+
 })() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
 
 
