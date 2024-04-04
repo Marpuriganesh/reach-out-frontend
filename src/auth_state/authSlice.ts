@@ -36,58 +36,59 @@ const decryptData = (encryptedString: string | CryptoJS.lib.CipherParams) => {
 const persistedState = localStorage.getItem('authState');
 
 
-const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (() => {
-  try {
-    const data = JSON.parse(decryptData(persistedState));
-    if (data.expires_in < Date.now()) {
-      console.log('Token expired, refreshing...');
-      const requestOptions = {
-        method: 'post',
-        url: import.meta.env.VITE_TOKEN_URL,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          client_id: import.meta.env.VITE_CLIENT_ID,
-          client_secret: import.meta.env.VITE_CLIENT_SECRET,
-          grant_type: "refresh_token",
-          refresh_token: data.refresh_token
-        }
-      };
-  
-      // Return a Promise from the outer function
-      return axios.request(requestOptions)
-        .then(response => {
-          console.log('Refreshed token:', response.data);
-          // Update tokens in the state
-          data.auth_token = response.data.access_token;
-          data.refresh_token = response.data.refresh_token;
-          data.expires_in = Date.now() + response.data.expires_in * 1000;
-          // Set isLogined to true after successful token refresh
-          data.isLogined = true;
-  
-          // Save updated state to local storage
-          localStorage.setItem('authState', encryptData(JSON.stringify(data)));
-  
-          // Return the modified data object
-          return data;
-        })
-        .catch(error => {
-          console.error('Error refreshing token:', error);
-          // Handle token refresh failure here
-          throw error; // Throw the error to be caught by the outer catch block
-        });
-    } else {
-      console.log('Token not expired, using persisted state...');
-      // Set isLogined to true when using persisted state
+const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (async () => {try {
+  const data = JSON.parse(decryptData(persistedState));
+  if (data.expires_in < Date.now()) {
+    console.log('Token expired, refreshing...');
+    const requestOptions = {
+      method: 'post',
+      url: import.meta.env.VITE_TOKEN_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        client_secret: import.meta.env.VITE_CLIENT_SECRET,
+        grant_type: "refresh_token",
+        refresh_token: data.refresh_token
+      }
+    };
+
+    // Make the axios request
+    const response = await axios.request(requestOptions);
+    console.log('Refreshed token:', response.data);
+
+    // Check the response status
+    if (response.status === 200) {
+      // Update tokens in the state
+      data.auth_token = response.data.access_token;
+      data.refresh_token = response.data.refresh_token;
+      data.expires_in = Date.now() + response.data.expires_in * 1000;
+      // Set isLogined to true after successful token refresh
       data.isLogined = true;
-      return data;
+
+      // Save updated state to local storage
+      localStorage.setItem('authState', encryptData(JSON.stringify(data)));
+    } else {
+      console.error('Error refreshing token:', response.statusText);
+      // Handle token refresh failure here
+      // For example, you might throw an error or return a default state
+      return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
     }
-  } catch (error) {
-    console.error('Error parsing decrypted data:', error);
-    return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
+
+    // Return the modified data object
+    return data;
+  } else {
+    console.log('Token not expired, using persisted state...');
+    // Set isLogined to true when using persisted state
+    data.isLogined = true;
+    return data;
   }
-  
+} catch (error) {
+  console.error('Error parsing decrypted data:', error);
+  return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
+}
+
 
 })() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
 
