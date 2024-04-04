@@ -42,8 +42,41 @@ const initialState = persistedState && (decryptData(persistedState) !== 'null') 
     const data = JSON.parse(decryptData(persistedState));
     if (data.expires_in < Date.now())
     {
-      return { user: null, isLogined: false, auth_token: null , refresh_token: null,expires_in:null };
+      console.log('Token expired, refreshing...');
+      const requestOptions = {
+        method: 'post',
+      url: import.meta.env.VITE_REVOKE_URL,
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      data: {
+          client_id: import.meta.env.VITE_CLIENT_ID,
+          client_secret: import.meta.env.VITE_CLIENT_SECRET,
+          refresh_token: data.refresh_token
+      }
+
+      }
+      axios.request(requestOptions)
+      .then(response => {
+        console.log('Refreshed token:', response.data);
+        // Update tokens in the state
+        data.auth_token = response.data.access_token;
+        data.refresh_token = response.data.refresh_token;
+        data.expires_in = Date.now() + response.data.expires_in * 1000;
+
+        // Save updated state to local storage
+        localStorage.setItem('authState', encryptData(JSON.stringify(data)));
+
+        // Return the modified data object
+        return data;
+      })
+      .catch(error => {
+        console.error('Error refreshing token:', error);
+        // Handle token refresh failure here
+        return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
+      });
     }
+    console.log('Token not expired, using persisted state...');
     return data;
   }
   catch (error)
