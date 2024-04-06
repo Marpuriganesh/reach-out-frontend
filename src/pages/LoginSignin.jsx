@@ -21,6 +21,19 @@ function LoginSignin() {
   const [loadSpinner,setLoadSpinner] = useState(false);
   const dispatch = useDispatch();
 
+  //debug
+  const [currentTime, setCurrentTime] = useState(Date.now());
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000); // Update every second
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formattedTime = new Date(currentTime).toLocaleString();
+
   const handleInputUsername = (value) => {
     setUsername(value);
   };
@@ -215,6 +228,7 @@ function LoginSignin() {
         <>
         <div>dasbord | </div>
         <button onClick={()=>dispatch(logoutAsync(refresh_token,auth_token))}>Sign_out</button>
+        <div>time: {formattedTime}</div>
         </>
       ) : login_sigin}
       </motion.div>

@@ -1,9 +1,10 @@
 
 
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import CryptoJS from 'crypto-js';
 import { Dispatch } from 'redux';
+
 
 // Secret key for encryption/decryption (should be kept secure)
 const SECRET_KEY = import.meta.env.VITE_STORAGE_SECRET_KEY as string;
@@ -36,59 +37,14 @@ const decryptData = (encryptedString: string | CryptoJS.lib.CipherParams) => {
 const persistedState = localStorage.getItem('authState');
 
 
-const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (async () => {try {
-  const data = JSON.parse(decryptData(persistedState));
-  if (data.expires_in < Date.now()) {
-    console.log('Token expired, refreshing...');
-    const requestOptions = {
-      method: 'post',
-      url: import.meta.env.VITE_TOKEN_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        client_id: import.meta.env.VITE_CLIENT_ID,
-        client_secret: import.meta.env.VITE_CLIENT_SECRET,
-        grant_type: "refresh_token",
-        refresh_token: data.refresh_token
-      }
-    };
-
-    // Make the axios request
-    const response = await axios.request(requestOptions);
-    console.log('Refreshed token:', response.data);
-
-    // Check the response status
-    if (response.status === 200) {
-      // Update tokens in the state
-      data.auth_token = response.data.access_token;
-      data.refresh_token = response.data.refresh_token;
-      data.expires_in = Date.now() + response.data.expires_in * 1000;
-      // Set isLogined to true after successful token refresh
-      data.isLogined = true;
-
-      // Save updated state to local storage
-      localStorage.setItem('authState', encryptData(JSON.stringify(data)));
-    } else {
-      console.error('Error refreshing token:', response.statusText);
-      // Handle token refresh failure here
-      // For example, you might throw an error or return a default state
-      return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
-    }
-
-    // Return the modified data object
-    return data;
-  } else {
-    console.log('Token not expired, using persisted state...');
-    // Set isLogined to true when using persisted state
-    data.isLogined = true;
-    return data;
+const initialState = persistedState && (decryptData(persistedState) !== 'null') ? (() => {
+  try {
+    return JSON.parse(decryptData(persistedState));
+  } catch (error) {
+    console.error('Error parsing decrypted data:', error);
+    return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
   }
-} catch (error) {
-  console.error('Error parsing decrypted data:', error);
-  return { user: null, isLogined: false, auth_token: null, refresh_token: null, expires_in: null };
-}
-
+  
 
 })() : { user: null, isLogined: false,auth_token: null , refresh_token: null ,expires_in: null};
 
@@ -99,11 +55,13 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
+        login: (state, action:PayloadAction<{user:string,islogined:boolean,auth_token:string,refresh_token:string,expires_in:number}>) => {
             state.user = action.payload.user;
             state.auth_token = action.payload.auth_token;
             state.refresh_token = action.payload.refresh_token;
-            state.expires_in = Date.now()+action.payload.expires_in* 1000;
+            state.expires_in = Date.now()+((action.payload.expires_in-21)* 1000);
+            const formattedTime = new Date(state.expires_in).toLocaleString();
+            console.log(formattedTime);
             state.isLogined = true;
             // Save state to local storage
             localStorage.setItem('authState', encryptData(JSON.stringify(state)));
@@ -120,6 +78,7 @@ export const authSlice = createSlice({
 });
 
 export const { login, logout } = authSlice.actions;
+
 
 const authReducers = authSlice.reducer;
 
@@ -143,6 +102,10 @@ export const revokeToken = (refreshToken:string,authToken:string) => {
   return axios.request(revokeOptions);
 };
 
+
+
+
+
 // Logout action creator with async logic
 export const logoutAsync = (refreshToken:string,authToken:string) => (dispatch:Dispatch) => {
   // Revoke token before logging out
@@ -158,3 +121,63 @@ export const logoutAsync = (refreshToken:string,authToken:string) => (dispatch:D
           dispatch(logout());
       });
 };
+
+
+export const refreshToken = (refresh_token:string) => {
+
+  const requestOptions = {
+    method: 'post',
+    url: import.meta.env.VITE_TOKEN_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    data: {
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        client_secret: import.meta.env.VITE_CLIENT_SECRET,
+        grant_type: "refresh_token",
+        refresh_token:refresh_token
+    }
+  };
+
+  return axios.request(requestOptions);
+}
+
+
+export const initializeAuthState = () =>  (dispatch: Dispatch) => {
+
+  try{
+    const persistedState = localStorage.getItem('authState');
+    if (persistedState !== null) {
+      const decryptedState = decryptData(persistedState);
+      if (decryptedState !== 'null'){
+        const data = JSON.parse(decryptedState);
+        if (data.expires_in < Date.now()) {
+          console.log('Token expired, refreshing...');
+           refreshToken(data.refresh_token)
+          .then(response => {
+            // Update tokens in the state
+            data.auth_token = response.data.access_token;
+            data.refresh_token = response.data.refresh_token;
+            data.expires_in = response.data.expires_in;
+            
+            // Set isLogined to true after successful token refresh
+            data.isLogined = true;
+            // Save updated state to local storage
+            dispatch(login(data));
+
+          })
+          .catch(error => {
+            console.error('Error refreshing token:', error);
+            dispatch(logout());
+
+          })
+        }
+
+      }
+    }
+  }
+  catch (error) {
+    console.error('Error initializing auth state:', error);
+    dispatch(logout());
+  }
+}
