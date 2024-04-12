@@ -20,6 +20,8 @@ function LoginSignin() {
   const [password, setPassword] = useState("");
   const [loadSpinner,setLoadSpinner] = useState(false);
   const dispatch = useDispatch();
+  const expires_in = useSelector((state) => state.auth.expires_in)
+  const user = useSelector((state) => state.auth.user)
 
   //debug
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -33,6 +35,7 @@ function LoginSignin() {
   }, []);
 
   const formattedTime = new Date(currentTime).toLocaleString();
+  const expiresTime = new Date(expires_in).toLocaleString();
 
   const handleInputUsername = (value) => {
     setUsername(value);
@@ -69,7 +72,8 @@ function LoginSignin() {
               user:username,
               auth_token:response.data.access_token,
               refresh_token:response.data.refresh_token,
-              expires_in:response.data.expires_in
+              expires_in:response.data.expires_in,
+              expire_timestamp:response.data.expire_timestamp
             }
             setLoadSpinner(false)
             dispatch(login(login_data))
@@ -229,6 +233,8 @@ function LoginSignin() {
         <div>dasbord | </div>
         <button onClick={()=>dispatch(logoutAsync(refresh_token,auth_token))}>Sign_out</button>
         <div>time: {formattedTime}</div>
+        <div>expires in: {expiresTime}</div>
+        <div>user: {user}</div>
         </>
       ) : login_sigin}
       </motion.div>

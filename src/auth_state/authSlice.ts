@@ -55,11 +55,11 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action:PayloadAction<{user:string,islogined:boolean,auth_token:string,refresh_token:string,expires_in:number}>) => {
+        login: (state, action:PayloadAction<{user:string,islogined:boolean,auth_token:string,refresh_token:string,expires_in:number,expire_timestamp:number}>) => {
             state.user = action.payload.user;
             state.auth_token = action.payload.auth_token;
             state.refresh_token = action.payload.refresh_token;
-            state.expires_in = Date.now()+((action.payload.expires_in-21)* 1000);
+            state.expires_in = action.payload.expire_timestamp;
             const formattedTime = new Date(state.expires_in).toLocaleString();
             console.log(formattedTime);
             state.isLogined = true;
@@ -158,7 +158,7 @@ export const initializeAuthState = () =>  (dispatch: Dispatch) => {
             // Update tokens in the state
             data.auth_token = response.data.access_token;
             data.refresh_token = response.data.refresh_token;
-            data.expires_in = response.data.expires_in;
+            data.expires_in = response.data.expire_timestamp;
             
             // Set isLogined to true after successful token refresh
             data.isLogined = true;
