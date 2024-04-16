@@ -7,10 +7,10 @@ import ReachOutLogoH from './assets/reach_out_horizontal_white.svg';
 
 function NavBar(props) {
 
-    const {className} = props;
+    const {className,...props_extra} = props;
   return (
     <>
-    <nav className={className}>
+    <nav className={className} {...props_extra}>
       <img alt='' src={ReachOutLogoH} id='logo'/>
     <li>
     <Link to='/home' title='How this works?' className='a'>ⓘ</Link>
