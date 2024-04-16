@@ -21,7 +21,7 @@ function PageMain(): JSX.Element {
     return (
         <>
             <AnimatePresence mode="wait">
-                <motion.div key={renderPage}>
+                <motion.div key={renderPage} style={{ height: '100%' , width: '100%'}}>
                     {renderPage === '/' && (
                         <LoginSignin/>
                     )}

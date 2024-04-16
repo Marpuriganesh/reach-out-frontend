@@ -195,16 +195,17 @@ function LoginSignin() {
         animate={{ y: "0%" }}
         transition={{ duration: 0.5 }}
         exit={{ y: "-100%", transition: { duration: 0.4 } }}
+        style={{ height: "100%",width:"100%" }}
       >
         <NavBar className="nav-bar" />
         <div className={`page-container ${isActive ? "transition" : ""}`}>
-          <div className={`container ${path === "/signin" ? "flip" : ""}`}>
+          <motion.div className={`container ${path === "/signin" ? "flip" : ""}`}>
             <AnimatePresence mode="wait">
               <motion.div key={path} className="motion-div">
                 {path === "/signin" ? formSingup : formLogin}
               </motion.div>
             </AnimatePresence>
-          </div>
+          </motion.div>
           {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
           {waveConfigs.map((config, index) => (
             <AnimatedWave
@@ -222,9 +223,9 @@ function LoginSignin() {
   );
 
   return (
-    <motion.div exit={{ y: "-100%", transition: { duration: 0.4 } }}>
+    <motion.div exit={{ y: "-100%", transition: { duration: 0.4 } }} style={{height:"100%",width:"100%"}}>
       <AnimatePresence>
-        <motion.div key={isLogined}>
+        <motion.div key={isLogined} style={{height:"100%",width:"100%"}}>
           {isLogined ? (
             <>
               <div>dasbord | </div>

@@ -24,8 +24,6 @@ function App(): JSX.Element {
           element={<PageMain />}
         />
         <Route path="*" element={<NotFound />}/>
-
-
       </Routes>
     </BrowserRouter>
   );
