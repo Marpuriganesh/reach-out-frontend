@@ -199,7 +199,7 @@ function LoginSignin() {
         <NavBar className="nav-bar" />
         <div className={`page-container ${isActive ? "transition" : ""}`}>
           <div className={`container ${path === "/signin" ? "flip" : ""}`}>
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               <motion.div key={path} className="motion-div">
                 {path === "/signin" ? formSingup : formLogin}
               </motion.div>
