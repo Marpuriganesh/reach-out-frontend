@@ -4,10 +4,10 @@ import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector,useDispatch } from "react-redux";
-import { login,logoutAsync } from "../auth_state/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
-import {ScaleLoader} from 'react-spinners';
+import { ScaleLoader } from "react-spinners";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -18,14 +18,14 @@ function LoginSignin() {
   const auth_token = useSelector((state) => state.auth.auth_token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loadSpinner,setLoadSpinner] = useState(false);
+  const [loadSpinner, setLoadSpinner] = useState(false);
   const dispatch = useDispatch();
-  const expires_in = useSelector((state) => state.auth.expires_in)
-  const user = useSelector((state) => state.auth.user)
+  const expires_in = useSelector((state) => state.auth.expires_in);
+  const user = useSelector((state) => state.auth.user);
 
   //debug
   const [currentTime, setCurrentTime] = useState(Date.now());
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
@@ -46,44 +46,43 @@ function LoginSignin() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
 
-          e.preventDefault();
+    setLoadSpinner(true);
 
-          setLoadSpinner(true);
+    const requestData = {
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      client_secret: import.meta.env.VITE_CLIENT_SECRET,
+      grant_type: "password",
+      username: username,
+      password: password,
+    };
 
-          const requestData = {
-            client_id: import.meta.env.VITE_CLIENT_ID,
-            client_secret: import.meta.env.VITE_CLIENT_SECRET,
-            grant_type: "password",
-            username: username,
-            password: password
+    axios
+      .post(import.meta.env.VITE_TOKEN_URL, requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("Response:", response.data);
+        console.log("Access Token:", response.data.access_token);
+        console.log("Refresh Token:", response.data.refresh_token);
+        const login_data = {
+          user: username,
+          auth_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+          expires_in: response.data.expires_in,
+          expire_timestamp: response.data.expire_timestamp,
         };
-
-        axios.post(import.meta.env.VITE_TOKEN_URL, requestData, {
-          headers: {
-              'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-            console.log('Response:', response.data);
-            console.log('Access Token:', response.data.access_token);
-            console.log('Refresh Token:', response.data.refresh_token);
-            const login_data = {
-              user:username,
-              auth_token:response.data.access_token,
-              refresh_token:response.data.refresh_token,
-              expires_in:response.data.expires_in,
-              expire_timestamp:response.data.expire_timestamp
-            }
-            setLoadSpinner(false)
-            dispatch(login(login_data))
-        })
-        .catch(error => {
-            setLoadSpinner(false)
-            console.error('Error:', error.response.data);
-        });
-
-  }
+        setLoadSpinner(false);
+        dispatch(login(login_data));
+      })
+      .catch((error) => {
+        setLoadSpinner(false);
+        console.error("Error:", error.response.data);
+      });
+  };
 
   // const [isChecked, setIsChecked] = useState(false);
 
@@ -144,11 +143,12 @@ function LoginSignin() {
         transition={{ delay: 0.1, duration: 0.4 }}
         exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
       ></motion.div>
-      
-      
-        {(loadSpinner&&(<motion.div className="loading-spinner" >
+
+      {loadSpinner && (
+        <motion.div className="loading-spinner">
           <ScaleLoader color="#ffffff" />
-        </motion.div>))}
+        </motion.div>
+      )}
 
       <motion.form
         initial={{ y: -250, opacity: 0 }}
@@ -159,12 +159,9 @@ function LoginSignin() {
           opacity: 0,
           transition: { duration: 0.6, delay: 0.2 },
         }}
-
-        className={(loadSpinner?'form':'')}
-        
+        className={loadSpinner ? "form" : ""}
         onSubmit={handleSubmit}
       >
-        
         <CustomInput
           type="text"
           placeholder="Username"
@@ -193,53 +190,58 @@ function LoginSignin() {
 
   const login_sigin = (
     <>
-    <motion.div
-      initial={{ y: "-100%" }}
-      animate={{ y: "0%" }}
-      transition={{ duration: 0.5 }}
-      exit={{ y: "-100%", transition: { duration: 0.4 } }}
-    >
-      <NavBar className="nav-bar" />
-    <div className={`page-container ${isActive ? "transition" : ""}`}>
-      <div className={`container ${path === "/signin" ? "flip" : ""}`}>
-        <AnimatePresence>
-          <motion.div key={path} className="motion-div">
-            {path === "/signin" ? formSingup : formLogin}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
-      {waveConfigs.map((config, index) => (
-        <AnimatedWave
-          key={index} // Remember to provide a unique key for each component in the array
-          phase={config.phase}
-          amplitude={config.amplitude}
-          speed={config.speed}
-          frequency={config.frequency}
-          className={`wave${index + 1}`} // Append index value to "wave"
-        />
-      ))}
-    </div>
-    </motion.div>
+      <motion.div
+        initial={{ y: "-100%" }}
+        animate={{ y: "0%" }}
+        transition={{ duration: 0.5 }}
+        exit={{ y: "-100%", transition: { duration: 0.4 } }}
+      >
+        <NavBar className="nav-bar" />
+        <div className={`page-container ${isActive ? "transition" : ""}`}>
+          <div className={`container ${path === "/signin" ? "flip" : ""}`}>
+            <AnimatePresence>
+              <motion.div key={path} className="motion-div">
+                {path === "/signin" ? formSingup : formLogin}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
+          {waveConfigs.map((config, index) => (
+            <AnimatedWave
+              key={index} // Remember to provide a unique key for each component in the array
+              phase={config.phase}
+              amplitude={config.amplitude}
+              speed={config.speed}
+              frequency={config.frequency}
+              className={`wave${index + 1}`} // Append index value to "wave"
+            />
+          ))}
+        </div>
+      </motion.div>
     </>
   );
 
   return (
     <motion.div exit={{ y: "-100%", transition: { duration: 0.4 } }}>
-    <AnimatePresence>
-      <motion.div key={isLogined} >
-      {isLogined ? (
-        <>
-        <div>dasbord | </div>
-        <button onClick={()=>dispatch(logoutAsync(refresh_token,auth_token))}>Sign_out</button>
-        <div>time: {formattedTime}</div>
-        <div>expires in: {expiresTime}</div>
-        <div>user: {user}</div>
-        </>
-      ) : login_sigin}
-      </motion.div>
-    
-    </AnimatePresence>
+      <AnimatePresence>
+        <motion.div key={isLogined}>
+          {isLogined ? (
+            <>
+              <div>dasbord | </div>
+              <button
+                onClick={() => dispatch(logoutAsync(refresh_token, auth_token))}
+              >
+                Sign_out
+              </button>
+              <div>time: {formattedTime}</div>
+              <div>expires in: {expiresTime}</div>
+              <div>user: {user}</div>
+            </>
+          ) : (
+            login_sigin
+          )}
+        </motion.div>
+      </AnimatePresence>
     </motion.div>
   );
 }

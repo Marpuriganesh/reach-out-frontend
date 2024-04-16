@@ -8,17 +8,18 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      // devOptions: {
-      //   enabled: true
-      // },
+      devOptions: {
+        // enabled: true,
+        type: "module",
+      },
       includeAssets: ["reach_out_hand_logo.svg", "reach_out_hand_logo.png"],
       manifest: {
         name: "Reach Out",
         short_name: "Reach Out",
         description:
           "Reach Out is a platform for people to connect with each other.",
-        theme_color: "#33cfff",
-        background_color: "#33cfff",
+        theme_color: "#050505",
+        // background_color: "#33cfff",
         display: "standalone",
         icons: [
           {
@@ -35,6 +36,9 @@ export default defineConfig({
           },
         ],
       },
+      // injectRegister: null,
+      strategies: "injectManifest",
+      filename: "sw.ts",
     }),
   ],
   server: {
