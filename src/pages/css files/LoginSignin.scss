@@ -366,8 +366,8 @@ $numberOfWaves: 3;
 @media (min-height: 992px) and (max-height: 1199px) and (orientation: portrait) {
   :root {
     --signInLogo-scale: 70%; /* Adjust as needed for portrait */
-    --container-width: 50%;  /* Adjust as needed for portrait */
-    --container-height: 55cqh;  /* Adjust as needed for portrait */
+    --container-width: 48%;  /* Adjust as needed for portrait */
+    --container-height: 60vh;  /* Adjust as needed for portrait */
     --input_text-margin-top: 8%; /* Adjust as needed for portrait */
   }
   .nav-bar {
@@ -386,7 +386,7 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 75%; /* Adjust as needed for landscape */
     --container-width: 35%;  /* Adjust as needed for landscape */
-    --container-height: 75cqh;  /* Adjust as needed for landscape */
+    --container-height: 75vh;  /* Adjust as needed for landscape */
     --input_text-margin-top: 4%; /* Adjust as needed for landscape */
   }
 }
@@ -396,9 +396,13 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 55%;
     --container-width: 35%;
-    --container-height: 80cqh;
+    --container-height: 80vh;
     --input_text-margin-top: 5%;
   }
+  .motion-div{
+    scale: 0.55;
+  }
+
 }
 
 /* Mobile Devices (Portrait) */
@@ -406,7 +410,7 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 70%;
     --container-width: 90%;
-    --container-height: 73cqh;
+    --container-height: 73vh;
     --input_text-margin-top: 8%;
   }
   .nav-bar {
