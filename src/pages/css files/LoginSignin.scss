@@ -5,7 +5,7 @@
 :root {
   --signInLogo-scale: 70%;
   --container-width: 25%;
-  --container-height: 70%;
+  --container-height: 70cqh;
   --input_text-margin-top: 5%;
 
   //   --page-container-color: white;
@@ -113,7 +113,7 @@
   -ms-border-radius: 1rem;
   -o-border-radius: 1rem;
   width: var(--container-width);
-  height: var(--container-height);
+  height: fit-content;
   box-sizing: border-box;
   //box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.281),inset 0px -20px 70px rgba(48, 198, 236, 0.24),inset 0px 20px 70px rgba(14, 14, 14, 0.164);
   backdrop-filter: blur(8px);
@@ -129,12 +129,14 @@
   -o-transition: transform 1.5s ease-in-out;
   .motion-div {
     width: 100%;
-    height: 100%;
+    height: var(--container-height);
+    // height: fit-content;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
     gap: 1rem;
+    // padding: 2rem 0 2rem 0;
   }
 }
 
@@ -334,7 +336,7 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 90%;
     --container-width: 25%;
-    --container-height: 80%;
+    --container-height: 80cqh;
     --input_text-margin-top: 5%;
   }
 }
@@ -344,7 +346,7 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 70%;
     --container-width: 25%;
-    --container-height: 80%;
+    --container-height: 80cqh;
     --input_text-margin-top: 7%;
   }
 }
@@ -354,59 +356,49 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 65%;
     --container-width: 25%;
-    --container-height: 78%;
+    --container-height: 78cqh;
     --input_text-margin-top: 5%;
   }
 }
 
-/* Tablets */
-@media (min-width: 992px) and (max-width: 1199px) {
-  @media (orientation: landscape) {
-    :root {
-      --signInLogo-scale: 75%;
-      --container-width: 36%;
-      --container-height: 75%;
-      --input_text-margin-top: 4%;
-    }
+
+/* Tablets (Portrait) */
+@media (min-height: 992px) and (max-height: 1199px) and (orientation: portrait) {
+  :root {
+    --signInLogo-scale: 70%; /* Adjust as needed for portrait */
+    --container-width: 50%;  /* Adjust as needed for portrait */
+    --container-height: 55cqh;  /* Adjust as needed for portrait */
+    --input_text-margin-top: 8%; /* Adjust as needed for portrait */
   }
-  @media (orientation: portrait) {
-    :root {
-      --signInLogo-scale: 20%;
-      --container-width: 36%;
-      --container-height: 75%;
-      --input_text-margin-top: 4%;
+  .nav-bar {
+    #logo{
+      width: 20%;
+      height: 80%;
     }
-    .nav-bar {
-      display: none;
+    .a{
+      font-size: 1.8rem;
     }
   }
 }
 
-// /* Tablets (Portrait) */
-// @media (min-width: 992px) and (max-width: 1199px) and (orientation: portrait) {
-//   :root {
-//     --signInLogo-scale: 100%; /* Adjust as needed for portrait */
-//     --container-width: 100%;  /* Adjust as needed for portrait */
-//     --container-height: 60%;  /* Adjust as needed for portrait */
-//     --input_text-margin-top: 8%; /* Adjust as needed for portrait */
-//   }
-//   .nav-bar {
-//     display: none;
-//   }
-// }
-
-// /* Tablets (Landscape) */
-// @media (min-width: 992px) and (max-width: 1199px) and (orientation: landscape) {
-//   :root {
-//     --signInLogo-scale: 75%; /* Adjust as needed for landscape */
-//     --container-width: 36%;  /* Adjust as needed for landscape */
-//     --container-height: 75%;  /* Adjust as needed for landscape */
-//     --input_text-margin-top: 4%; /* Adjust as needed for landscape */
-//   }
-// }
+/* Tablets (Landscape) */
+@media (min-width: 992px) and (max-width: 1199px) and (orientation: landscape) {
+  :root {
+    --signInLogo-scale: 75%; /* Adjust as needed for landscape */
+    --container-width: 35%;  /* Adjust as needed for landscape */
+    --container-height: 75cqh;  /* Adjust as needed for landscape */
+    --input_text-margin-top: 4%; /* Adjust as needed for landscape */
+  }
+}
 
 /* Mobile Devices (Landscape) */
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 991px) and (orientation:landscape){
+  :root {
+    --signInLogo-scale: 55%;
+    --container-width: 35%;
+    --container-height: 80cqh;
+    --input_text-margin-top: 5%;
+  }
 }
 
 /* Mobile Devices (Portrait) */
@@ -414,7 +406,7 @@ $numberOfWaves: 3;
   :root {
     --signInLogo-scale: 70%;
     --container-width: 90%;
-    --container-height: 73%;
+    --container-height: 73cqh;
     --input_text-margin-top: 8%;
   }
   .nav-bar {
