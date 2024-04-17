@@ -361,21 +361,20 @@ $numberOfWaves: 3;
   }
 }
 
-
 /* Tablets (Portrait) */
 @media (min-height: 992px) and (max-height: 1199px) and (orientation: portrait) {
   :root {
     --signInLogo-scale: 70%; /* Adjust as needed for portrait */
-    --container-width: 48%;  /* Adjust as needed for portrait */
-    --container-height: 60vh;  /* Adjust as needed for portrait */
+    --container-width: 48%; /* Adjust as needed for portrait */
+    --container-height: 60vh; /* Adjust as needed for portrait */
     --input_text-margin-top: 8%; /* Adjust as needed for portrait */
   }
   .nav-bar {
-    #logo{
+    #logo {
       width: 20%;
       height: 80%;
     }
-    .a{
+    .a {
       font-size: 1.8rem;
     }
   }
@@ -385,24 +384,23 @@ $numberOfWaves: 3;
 @media (min-width: 992px) and (max-width: 1199px) and (orientation: landscape) {
   :root {
     --signInLogo-scale: 75%; /* Adjust as needed for landscape */
-    --container-width: 35%;  /* Adjust as needed for landscape */
-    --container-height: 75vh;  /* Adjust as needed for landscape */
+    --container-width: 35%; /* Adjust as needed for landscape */
+    --container-height: 75vh; /* Adjust as needed for landscape */
     --input_text-margin-top: 4%; /* Adjust as needed for landscape */
   }
 }
 
 /* Mobile Devices (Landscape) */
-@media (min-width: 768px) and (max-width: 991px) and (orientation:landscape){
+@media (min-width: 768px) and (max-width: 991px) and (orientation: landscape) {
   :root {
     --signInLogo-scale: 55%;
     --container-width: 35%;
     --container-height: 80vh;
     --input_text-margin-top: 5%;
   }
-  .motion-div{
+  .motion-div {
     scale: 0.55;
   }
-
 }
 
 /* Mobile Devices (Portrait) */
