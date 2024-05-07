@@ -1,0 +1,83 @@
+.elements_container {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  place-content: center;
+  /* outline: 1px solid white;
+    outline-offset: 1px; */
+  gap: 2rem;
+
+  button {
+    background: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    width: 65%;
+    padding: 10px;
+    border-style: none;
+    font-family: Helvetica;
+    color: white;
+    display: flex;
+    align-items: center;
+
+    /* gap: 0.8rem; */
+
+    svg {
+      margin-left: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
+    /*filter: invert();
+    */
+    outline: 2px solid white;
+    border-radius: 2rem;
+    -webkit-border-radius: 2rem;
+    -moz-border-radius: 2rem;
+    -ms-border-radius: 2rem;
+    -o-border-radius: 2rem;
+    transition: all 0.2s ease-in-out;
+    span {
+      width: 100%;
+    }
+  }
+  button:hover {
+    outline: none;
+    svg {
+      #fill {
+        fill: white;
+      }
+      #mask {
+        fill: orangered;
+      }
+    }
+  }
+  box-sizing: border-box;
+}
+
+.reddit:hover {
+  background: orangered;
+  border: none;
+  filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+  -webkit-filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+}
+
+.github:hover {
+  background: rgb(0, 0, 0);
+  border: none;
+  filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+  -webkit-filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+}
+
+.facebook:hover {
+  background: rgb(0, 132, 255);
+  border: none;
+  filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+  -webkit-filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+}
+
+.google:hover {
+  background: rgb(255, 0, 0);
+  border: none;
+  filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+  -webkit-filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+}

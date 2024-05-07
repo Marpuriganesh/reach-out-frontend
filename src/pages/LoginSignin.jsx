@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import "./css files/LoginSignin.scss";
 import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
+import SignInElements from "../componets/SignInElements";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logoutAsync } from "../auth_state/authSlice";
@@ -118,8 +120,14 @@ function LoginSignin() {
 
   const formSingup = (
     <>
-      <div className="signin" onClick={() => setPath("/")}>
-        test
+      <div className="signin">
+        <SignInElements/>
+        <div className="login_back">
+          <div className="text">Already have an account?</div>
+          <span className="a" onClick={() => setPath("/")}>
+            Log in
+          </span>
+        </div>
       </div>
     </>
   );
@@ -195,11 +203,13 @@ function LoginSignin() {
         animate={{ y: "0%" }}
         transition={{ duration: 0.5 }}
         exit={{ y: "-100%", transition: { duration: 0.4 } }}
-        style={{ height: "100%",width:"100%" }}
+        style={{ height: "100%", width: "100%" }}
       >
         <NavBar className="nav-bar" />
         <div className={`page-container ${isActive ? "transition" : ""}`}>
-          <motion.div className={`container ${path === "/signin" ? "flip" : ""}`}>
+          <motion.div
+            className={`container ${path === "/signin" ? "flip" : ""}`}
+          >
             <AnimatePresence mode="wait">
               <motion.div key={path} className="motion-div">
                 {path === "/signin" ? formSingup : formLogin}
@@ -223,9 +233,12 @@ function LoginSignin() {
   );
 
   return (
-    <motion.div exit={{ y: "-100%", transition: { duration: 0.4 } }} style={{height:"100%",width:"100%"}}>
+    <motion.div
+      exit={{ y: "-100%", transition: { duration: 0.4 } }}
+      style={{ height: "100%", width: "100%" }}
+    >
       <AnimatePresence>
-        <motion.div key={isLogined} style={{height:"100%",width:"100%"}}>
+        <motion.div key={isLogined} style={{ height: "100%", width: "100%" }}>
           {isLogined ? (
             <>
               <div>dasbord | </div>
