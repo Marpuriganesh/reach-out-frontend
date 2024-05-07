@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./css files/SignInElements.css";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { setReddit } from "../auth_state/reddit";
+import { setReddit, clearRedditState } from "../auth_state/reddit";
 import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
 
@@ -185,25 +185,33 @@ const SignInElements: React.FC = () => {
     };
 
     const handleMessage = (event: MessageEvent) => {
-      console.log(event.origin);
+      // console.log(event.origin);
       // console.log(event.data);
       setData(event.data);
+      dispatch(clearRedditState());
     };
 
-    if (data?.state!==undefined && data?.code!==undefined) {
+    if (data?.state !== undefined && data?.code !== undefined) {
       fetchAccessToken();
     }
 
     window.addEventListener("message", handleMessage);
-    console.log("access_token:",access_token)
+    console.log("access_token:", access_token);
 
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  },[data, dispatch, access_token,reddit_client_id, reddit_client_secret, reddit_redirect_uri]);
+  }, [
+    data,
+    dispatch,
+    access_token,
+    reddit_client_id,
+    reddit_client_secret,
+    reddit_redirect_uri,
+  ]);
 
   const redditLogin = () => {
-    dispatch(setReddit(true))
+    dispatch(setReddit(true));
     window.open(
       `https://www.reddit.com/api/v1/authorize?client_id=${reddit_client_id}&response_type=code&state=yolo&redirect_uri=${reddit_redirect_uri}&duration=temporary&scope=identity,account`,
       "reddit login",
