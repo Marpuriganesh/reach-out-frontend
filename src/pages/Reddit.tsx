@@ -3,10 +3,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 
-
 function Reddit() {
   const location = useLocation();
-
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -15,7 +13,7 @@ function Reddit() {
     console.log(stateParam, codeParam);
     window.opener.postMessage(
       { state: stateParam, code: codeParam },
-      "https://reach-out.in/"
+      "https://www.reach-out.in/"
     );
     window.close();
   });
