@@ -143,7 +143,11 @@ const Github_logo = (
   </>
 );
 
-const SignInElements: React.FC = () => {
+interface SignInElementsProps {
+  providerInfo: (auth_token: string, provider: string) => void;
+}
+
+const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
   const reddit_client_id = import.meta.env.VITE_REEDIT_CLIENT_ID;
   const reddit_client_secret = import.meta.env.VITE_REDDIT_CLIENT_SECRET;
@@ -154,7 +158,6 @@ const SignInElements: React.FC = () => {
     code: string;
   };
   const [data, setData] = useState<Data | null>(null);
-  const [access_token, setAccessToken] = useState<string>("");
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -176,7 +179,7 @@ const SignInElements: React.FC = () => {
           console.log("reddit date:", response.data);
           const accessToken = response.data.access_token;
           console.log("Reddit Access Token:", accessToken);
-          setAccessToken(accessToken);
+          providerInfo(accessToken, "reddit");
           setData(null);
         })
         .catch((error) => {
@@ -187,27 +190,25 @@ const SignInElements: React.FC = () => {
     const handleMessage = (event: MessageEvent) => {
       // console.log(event.origin);
       // console.log(event.data);
-      setData(event.data);
       dispatch(clearRedditState());
+      setData(event.data);
     };
 
-    if (data?.state !== undefined && data?.code !== undefined) {
+    if (data?.state !== undefined && data?.code !== undefined ) {
       fetchAccessToken();
     }
 
     window.addEventListener("message", handleMessage);
-    console.log("access_token:", access_token);
-
     return () => {
       window.removeEventListener("message", handleMessage);
     };
   }, [
     data,
     dispatch,
-    access_token,
     reddit_client_id,
     reddit_client_secret,
     reddit_redirect_uri,
+    providerInfo,
   ]);
 
   const redditLogin = () => {

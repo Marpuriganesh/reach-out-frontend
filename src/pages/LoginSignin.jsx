@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
-import { ScaleLoader } from "react-spinners";
+import { ScaleLoader,BarLoader } from "react-spinners";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -18,6 +18,8 @@ function LoginSignin() {
   const isLogined = useSelector((state) => state.auth.isLogined);
   const refresh_token = useSelector((state) => state.auth.refresh_token);
   const auth_token = useSelector((state) => state.auth.auth_token);
+  const [provider_auth_token, setProvider_auth_token] = useState("");
+  const [provider, setProvider] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loadSpinner, setLoadSpinner] = useState(false);
@@ -38,6 +40,16 @@ function LoginSignin() {
 
   const formattedTime = new Date(currentTime).toLocaleString();
   const expiresTime = new Date(expires_in).toLocaleString();
+
+  // const changeInsertUser = (value) => {
+  //   setInsertUser(value);
+  // };
+
+  const providerInfo = (auth_token,provider) => {
+    setProvider_auth_token(auth_token);
+    setProvider(provider);
+    setPath('/insert')
+  }
 
   const handleInputUsername = (value) => {
     setUsername(value);
@@ -121,13 +133,24 @@ function LoginSignin() {
   const formSingup = (
     <>
       <div className="signin">
-        <SignInElements/>
-        <div className="login_back">
+        <SignInElements providerInfo={providerInfo}/>
+        <motion.div
+          className="login_back"
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "100%", opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="text">Already have an account?</div>
-          <span className="a" onClick={() => setPath("/")}>
+          <span
+            className="a"
+            onClick={() => {
+              setPath("/");
+            }}
+          >
             Log in
           </span>
-        </div>
+        </motion.div>
       </div>
     </>
   );
@@ -189,7 +212,12 @@ function LoginSignin() {
         >
           Log in
         </motion.button>
-        <span className="a" onClick={() => setPath("/signin")}>
+        <span
+          className="a"
+          onClick={() => {
+            setPath("/signin");
+          }}
+        >
           Sign in
         </span>
       </motion.form>
@@ -208,11 +236,12 @@ function LoginSignin() {
         <NavBar className="nav-bar" />
         <div className={`page-container ${isActive ? "transition" : ""}`}>
           <motion.div
-            className={`container ${path === "/signin" ? "flip" : ""}`}
+            className={`container`}
+            style={{ rotateY: path === "/signin" ? "-180deg" : path==='/insert'?'-360deg':'0deg' }}
           >
             <AnimatePresence mode="wait">
               <motion.div key={path} className="motion-div">
-                {path === "/signin" ? formSingup : formLogin}
+                {path === "/signin" ? formSingup : path==='/insert'?<><BarLoader color="#ffffff" /></>:formLogin}
               </motion.div>
             </AnimatePresence>
           </motion.div>
@@ -241,7 +270,7 @@ function LoginSignin() {
         <motion.div key={isLogined} style={{ height: "100%", width: "100%" }}>
           {isLogined ? (
             <>
-              <div>dasbord | </div>
+              <div>dashbord | </div>
               <button
                 onClick={() => dispatch(logoutAsync(refresh_token, auth_token))}
               >
