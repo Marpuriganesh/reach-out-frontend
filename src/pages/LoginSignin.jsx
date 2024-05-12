@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./css files/LoginSignin.scss";
 import SignIn from "../componets/assets/SignIn.svg";
 import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
@@ -9,7 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
-import { ScaleLoader,BarLoader } from "react-spinners";
+import { ScaleLoader, BarLoader } from "react-spinners";
+import InsertUserElements from "../componets/InsertUserElements";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -45,11 +46,11 @@ function LoginSignin() {
   //   setInsertUser(value);
   // };
 
-  const providerInfo = (auth_token,provider) => {
+  const providerInfo = useCallback((auth_token, provider) => {
     setProvider_auth_token(auth_token);
     setProvider(provider);
-    setPath('/insert')
-  }
+    setPath("/insert");
+  }, []);
 
   const handleInputUsername = (value) => {
     setUsername(value);
@@ -133,7 +134,7 @@ function LoginSignin() {
   const formSingup = (
     <>
       <div className="signin">
-        <SignInElements providerInfo={providerInfo}/>
+        <SignInElements providerInfo={providerInfo} />
         <motion.div
           className="login_back"
           initial={{ y: "100%", opacity: 0 }}
@@ -181,46 +182,48 @@ function LoginSignin() {
         </motion.div>
       )}
 
-      <motion.form
-        initial={{ y: -250, opacity: 0 }}
-        animate={{ y: 0, opacity: [1] }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-        exit={{
-          y: -250,
-          opacity: 0,
-          transition: { duration: 0.6, delay: 0.2 },
-        }}
-        className={loadSpinner ? "form" : ""}
-        onSubmit={handleSubmit}
-      >
-        <CustomInput
-          type="text"
-          placeholder="Username"
-          className="input_text"
-          exportInputValue={handleInputUsername}
-        />
-        <CustomInput
-          type="password"
-          placeholder="Password"
-          className="input_text"
-          exportInputValue={handleInputPassword}
-        />
-        <motion.button
-          initial={{ scale: 1.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring" }}
-        >
-          Log in
-        </motion.button>
-        <span
-          className="a"
-          onClick={() => {
-            setPath("/signin");
+      <div className="form-container">
+        <motion.form
+          initial={{ y: -250, opacity: 0 }}
+          animate={{ y: 0, opacity: [1] }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          exit={{
+            y: -250,
+            opacity: 0,
+            transition: { duration: 0.6, delay: 0.2 },
           }}
+          className={loadSpinner ? "form" : ""}
+          onSubmit={handleSubmit}
         >
-          Sign in
-        </span>
-      </motion.form>
+          <CustomInput
+            type="text"
+            placeholder="Username"
+            className="input_text"
+            exportInputValue={handleInputUsername}
+          />
+          <CustomInput
+            type="password"
+            placeholder="Password"
+            className="input_text"
+            exportInputValue={handleInputPassword}
+          />
+          <motion.button
+            initial={{ scale: 1.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, type: "spring" }}
+          >
+            Log in
+          </motion.button>
+          <span
+            className="a"
+            onClick={() => {
+              setPath("/signin");
+            }}
+          >
+            Sign in
+          </span>
+        </motion.form>
+      </div>
     </>
   );
 
@@ -237,11 +240,29 @@ function LoginSignin() {
         <div className={`page-container ${isActive ? "transition" : ""}`}>
           <motion.div
             className={`container`}
-            style={{ rotateY: path === "/signin" ? "-180deg" : path==='/insert'?'-360deg':'0deg' }}
+            style={{
+              rotateY:
+                path === "/signin"
+                  ? "-180deg"
+                  : path === "/insert"
+                  ? "-360deg"
+                  : "0deg",
+            }}
           >
             <AnimatePresence mode="wait">
               <motion.div key={path} className="motion-div">
-                {path === "/signin" ? formSingup : path==='/insert'?<><BarLoader color="#ffffff" /></>:formLogin}
+                {path === "/signin" ? (
+                  formSingup
+                ) : path === "/insert" ? (
+                  <>
+                    <InsertUserElements
+                      provider={provider}
+                      provider_auth_token={provider_auth_token}
+                    />
+                  </>
+                ) : (
+                  formLogin
+                )}
               </motion.div>
             </AnimatePresence>
           </motion.div>

@@ -159,6 +159,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   };
   const [data, setData] = useState<Data | null>(null);
 
+
   useEffect(() => {
     const fetchAccessToken = async () => {
       console.log(`data: ${data?.state}, ${data?.code}`);
@@ -180,6 +181,8 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
           const accessToken = response.data.access_token;
           console.log("Reddit Access Token:", accessToken);
           providerInfo(accessToken, "reddit");
+
+
           setData(null);
         })
         .catch((error) => {
@@ -194,9 +197,11 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       setData(event.data);
     };
 
-    if (data?.state !== undefined && data?.code !== undefined ) {
+    if (data?.state !== undefined && data?.code !== undefined) {
       fetchAccessToken();
     }
+
+
 
     window.addEventListener("message", handleMessage);
     return () => {
@@ -209,6 +214,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     reddit_client_secret,
     reddit_redirect_uri,
     providerInfo,
+
   ]);
 
   const redditLogin = () => {

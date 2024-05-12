@@ -1,24 +1,66 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Link } from "react-router-dom";
+import "./css files/NavBar.css";
+import ReachOutLogoH from "./assets/reach_out_horizontal_white.svg";
 
-import {Link} from 'react-router-dom'
-import './css files/NavBar.css'
-import ReachOutLogoH from './assets/reach_out_horizontal_white.svg';
+const AboutLogo = (
+  <>
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M34.5 18C34.5 27.1127 27.1127 34.5 18 34.5C8.8873 34.5 1.5 27.1127 1.5 18C1.5 8.8873 8.8873 1.5 18 1.5C27.1127 1.5 34.5 8.8873 34.5 18Z"
+        stroke="white"
+        strokeWidth="3"
+      />
+      <path
+        d="M17.2659 7.50147C18.0067 7.56339 18.6522 7.75945 19.2024 8.08967C19.7527 8.39924 20.0278 8.87392 20.0278 9.51371C20.0278 9.98839 19.795 10.3702 19.3294 10.6591C18.885 10.9274 18.3453 11.0616 17.7104 11.0616C17.0966 11.0616 16.6733 10.9068 16.4405 10.5972C16.2077 10.2876 16.0913 9.96775 16.0913 9.63754C16.0913 9.01839 16.1548 8.50243 16.2818 8.08967C16.4299 7.6769 16.758 7.48084 17.2659 7.50147ZM19.8056 22.1134C19.8056 22.9183 19.8268 23.6819 19.8691 24.4043C19.9326 25.106 20.0067 25.818 20.0913 26.5403C20.0701 26.7467 19.9114 26.9634 19.6151 27.1904C19.3188 27.3968 19.0543 27.5 18.8215 27.5C18.4194 27.5 18.0067 27.4278 17.5834 27.2833C17.1813 27.1182 16.9379 26.9221 16.8532 26.6951C16.7262 26.0347 16.6627 25.4465 16.6627 24.9305C16.6627 23.2382 16.6098 21.3395 16.504 19.2344C16.4194 17.3769 16.377 16.0767 16.377 15.3337C16.377 14.9622 16.5675 14.6423 16.9485 14.374C17.3294 14.1057 17.7315 13.9716 18.1548 13.9716C18.7686 13.9716 19.1918 14.1057 19.4246 14.374C19.6786 14.6423 19.8056 15.0654 19.8056 15.6433V22.1134Z"
+        fill="white"
+      />
+    </svg>
+  </>
+);
 
-
+const HomeLogo = (
+  <>
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 39 38"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5.125 32V21.4286C2.80368 21.4286 1.60395 18.656 3.1931 16.9639L15.6292 3.7222C17.5479 1.67928 20.7707 1.61213 22.7728 3.57334L36.6246 17.1424C38.2246 18.7098 37.1148 21.4286 34.875 21.4286V32C34.875 34.2091 33.0841 36 30.875 36H27.375C25.7181 36 24.375 34.6569 24.375 33V25.8036C24.375 23.3873 22.4162 21.4286 20 21.4286C17.5838 21.4286 15.625 23.3873 15.625 25.8036V33C15.625 34.6569 14.2819 36 12.625 36H9.125C6.91586 36 5.125 34.2091 5.125 32Z"
+        stroke="white"
+        strokeWidth="3"
+      />
+    </svg>
+  </>
+);
 
 function NavBar(props) {
-
-    const {className,...props_extra} = props;
+  const { className, ...props_extra } = props;
   return (
     <>
-    <nav className={className} {...props_extra}>
-      <img alt='' src={ReachOutLogoH} id='logo'/>
-    <li>
-    <Link to='/home' title='How this works?' className='a'>ⓘ</Link>
-    </li>
-    
-    </nav>
+      <nav className={className} {...props_extra}>
+        <img alt="" src={ReachOutLogoH} id="logo" />
+        <li>
+          <Link to="/home" title="How this works?" className="a">
+            {HomeLogo}
+          </Link>
+          <Link to="/home" title="How this works?" className="a">
+            {/* ⓘ */}
+            {AboutLogo}
+          </Link>
+        </li>
+      </nav>
     </>
-  )
+  );
 }
 
-export default NavBar
+export default NavBar;

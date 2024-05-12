@@ -12,7 +12,13 @@ export default defineConfig({
         // enabled: true,
         type: "module",
       },
-      includeAssets: ["reach_out_hand_logo.svg", "reach_out_hand_logo.png"],
+      includeAssets: [
+        "hand.svg",
+        "hand.png",
+        "reach_out_horizontal_white.svg",
+        "reach_out_hand_logo.png",
+        "reach_out_hand_logo_apple.png",
+      ],
       manifest: {
         name: "Reach Out",
         short_name: "Reach Out",
@@ -23,18 +29,19 @@ export default defineConfig({
         display: "standalone",
         icons: [
           {
-            src: "reach_out_hand_logo.svg",
+            src: "hand.svg",
             sizes: "any",
             type: "image/svg+xml",
             purpose: "any",
           },
           {
-            src: "reach_out_hand_logo.png",
+            src: "hand.png",
             sizes: "any",
             type: "image/png",
             purpose: "any",
           },
         ],
+        orientation: "portrait",
       },
       // injectRegister: null,
       strategies: "injectManifest",
