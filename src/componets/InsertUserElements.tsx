@@ -51,6 +51,18 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
     setRetypePassword(value);
   }, []);
 
+  function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log(
+      username,
+      pseudoUsername,
+      password,
+      retypePassword,
+      Props.provider_auth_token,
+      Props.provider
+    );
+  }
+
   return (
     <motion.div className="insert-container">
       {/* <span>provider auth token: | {Props.provider_auth_token}</span> */}
@@ -61,7 +73,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
         animate="visible"
         exit="exit"
       >
-        <motion.form>
+        <motion.form onSubmit={handleFormSubmit}>
           <span>Fill in the details</span>
 
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
