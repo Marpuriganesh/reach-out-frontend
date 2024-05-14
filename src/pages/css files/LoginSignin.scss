@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -76,19 +77,6 @@
     width: 1.5rem;
     height: 1.5rem;
   }
-}
-
-.transition {
-  transition: all 1s ease-in-out;
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  transform: translateY(-100%);
-  -webkit-transform: translateY(-100%);
-  -moz-transform: translateY(-100%);
-  -ms-transform: translateY(-100%);
-  -o-transform: translateY(-100%);
 }
 
 #sign-in {
@@ -197,6 +185,7 @@
 
 .form-container {
   width: 100%;
+  height: 50%;
   overflow: hidden;
 }
 
@@ -206,6 +195,7 @@
   display: flex;
   flex-direction: column;
   place-items: center;
+  place-content: center;
 }
 
 .form {
@@ -394,7 +384,7 @@ $numberOfWaves: 3;
       width: 20%;
       height: 80%;
     }
-    svg{
+    svg {
       width: 1.8rem;
       height: 1.8rem;
     }
@@ -422,7 +412,6 @@ $numberOfWaves: 3;
   .motion-div {
     scale: 0.55;
   }
-
 }
 
 /* Mobile Devices (Portrait) */

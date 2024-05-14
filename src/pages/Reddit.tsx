@@ -13,8 +13,8 @@ function Reddit() {
     console.log(stateParam, codeParam);
     window.opener.postMessage(
       { state: stateParam, code: codeParam },
-      "https://www.reach-out.in/"
-      // "http://localhost:3000/"
+      // "https://www.reach-out.in/"
+      "http://localhost:3000/"
     );
     window.close();
   });

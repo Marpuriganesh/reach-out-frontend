@@ -168,7 +168,7 @@ function LoginSignin() {
         animate={{ scaleX: 1 }}
         transition={{ delay: 0.1, duration: 0.4 }}
         exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
-      ></motion.div>
+      />
 
       {loadSpinner && (
         <motion.div className="loading-spinner">

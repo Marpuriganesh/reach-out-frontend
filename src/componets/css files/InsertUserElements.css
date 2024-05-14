@@ -1,18 +1,42 @@
 .insert-container {
   width: 100%;
   height: 100%;
-  
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-overflow: break-word;
+  place-content: center;
+  place-items: center;
   box-sizing: border-box;
-  span{
-    height: fit-content;
+  /* span{
     width: 100%;
-    outline: 1px solid white;
-    outline-offset: 1px;
-    font-size: 1rem;
-    padding: 1%;
+    height: fit-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 3%;
+  } */
+  .form-container{
+    /* outline: 1px solid white; */
+    width: 100%;
+    height: fit-content;
+    span{
+      width: 70%;
+      color: rgba(255, 255, 255, 0.336);
+      margin-bottom: 5%;
+    }
+    .line{
+      margin-top: 10%;
+      width: 70%;
+    }
+    button{
+      margin-top: 15% ;
+    }
+    .input_text {
+      margin-top: var(--input_text-margin-top);
+      width: 100%;
+    }
+    form{
+      gap: .2rem;
+    }
   }
 }
+
+
