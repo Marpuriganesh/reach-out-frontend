@@ -14,7 +14,6 @@ import InsertUserElements from "../componets/InsertUserElements";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
-  const [isActive, setIsActive] = useState(false);
   const [path, setPath] = useState("/");
   const isLogined = useSelector((state) => state.auth.isLogined);
   const refresh_token = useSelector((state) => state.auth.refresh_token);
@@ -126,11 +125,6 @@ function LoginSignin() {
     };
   }, [scrollDisabled]);
 
-  function buttonClicked() {
-    setIsActive(!isActive);
-    setScrollDisabled(!scrollDisabled);
-  }
-
   const formSingup = (
     <>
       <div className="signin">
@@ -165,7 +159,7 @@ function LoginSignin() {
         transition={{ duration: 0.4 }}
         exit={{ y: -250, opacity: 0, transition: { duration: 0.4 } }}
       >
-        <img id="sign-in" src={SignIn} alt="" onClick={buttonClicked}></img>
+        <img id="sign-in" src={SignIn} alt=""></img>
       </motion.div>
 
       <motion.div
@@ -237,7 +231,7 @@ function LoginSignin() {
         style={{ height: "100%", width: "100%" }}
       >
         <NavBar className="nav-bar" />
-        <div className={`page-container ${isActive ? "transition" : ""}`}>
+        <div className={`page-container `}>
           <motion.div
             className={`container`}
             style={{

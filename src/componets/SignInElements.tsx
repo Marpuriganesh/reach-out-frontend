@@ -159,7 +159,6 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   };
   const [data, setData] = useState<Data | null>(null);
 
-
   useEffect(() => {
     const fetchAccessToken = async () => {
       console.log(`data: ${data?.state}, ${data?.code}`);
@@ -182,7 +181,6 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
           console.log("Reddit Access Token:", accessToken);
           providerInfo(accessToken, "reddit");
 
-
           setData(null);
         })
         .catch((error) => {
@@ -201,8 +199,6 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       fetchAccessToken();
     }
 
-
-
     window.addEventListener("message", handleMessage);
     return () => {
       window.removeEventListener("message", handleMessage);
@@ -214,7 +210,6 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     reddit_client_secret,
     reddit_redirect_uri,
     providerInfo,
-
   ]);
 
   const redditLogin = () => {
@@ -248,12 +243,14 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     >
       <motion.button className="google" variants={buttonVariants}>
         {Google_logo}
-        <motion.span variants={textLogoVariants}>Login with Google</motion.span>
+        <motion.span variants={textLogoVariants}>
+          Sign in with Google
+        </motion.span>
       </motion.button>
       <motion.button className="facebook" variants={buttonVariants}>
         {Facebook_logo}
         <motion.span variants={textLogoVariants}>
-          Login with Facebook
+          Sign in with Facebook
         </motion.span>
       </motion.button>
       <motion.button
@@ -262,11 +259,15 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
         onClick={redditLogin}
       >
         {Reddit_logo}
-        <motion.span variants={textLogoVariants}>Login with Reddit</motion.span>
+        <motion.span variants={textLogoVariants}>
+          Sign in with Reddit
+        </motion.span>
       </motion.button>
       <motion.button className="github" variants={buttonVariants}>
         {Github_logo}
-        <motion.span variants={textLogoVariants}>Login with Github</motion.span>
+        <motion.span variants={textLogoVariants}>
+          Sign in with Github
+        </motion.span>
       </motion.button>
     </motion.div>
   );
