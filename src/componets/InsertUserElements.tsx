@@ -82,6 +82,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               placeholder="Username"
               className="input_text"
               exportInputValue={handleInputUsername}
+              autoComplete="off"
             />
           </motion.div>
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -90,6 +91,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               placeholder="Pseudo Username"
               className="input_text"
               exportInputValue={handleInputPseudoUsername}
+              autoComplete="off"
             />
           </motion.div>
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -98,6 +100,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               placeholder="Password"
               className="input_text"
               exportInputValue={handleInputPassword}
+              autoComplete="new-password"
             />
           </motion.div>
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -106,6 +109,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               placeholder="Retype Password"
               className="input_text"
               exportInputValue={handleRetypePassword}
+              autoComplete="new-password"
             />
           </motion.div>
 

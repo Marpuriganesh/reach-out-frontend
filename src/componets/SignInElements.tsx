@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setReddit, clearRedditState } from "../auth_state/reddit";
 import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
+import { Spinner } from "@reach-out/ui-library";
 
 const textLogoVariants = {
   hidden: { opacity: 0 },
@@ -158,6 +159,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     code: string;
   };
   const [data, setData] = useState<Data | null>(null);
+  const [loading, setLoading] = useState("");
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -214,6 +216,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
 
   const redditLogin = () => {
     dispatch(setReddit(true));
+
     window.open(
       `https://www.reddit.com/api/v1/authorize?client_id=${reddit_client_id}&response_type=code&state=yolo&redirect_uri=${reddit_redirect_uri}&duration=temporary&scope=identity,account`,
       "reddit login",
@@ -246,12 +249,18 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
         <motion.span variants={textLogoVariants}>
           Sign in with Google
         </motion.span>
+        {loading === "google" && (
+          <Spinner className="loader" count={12} speed={1} center_radius={16} />
+        )}
       </motion.button>
       <motion.button className="facebook" variants={buttonVariants}>
         {Facebook_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Facebook
         </motion.span>
+        {loading === "facebook" && (
+          <Spinner className="loader" count={12} speed={1} center_radius={16} />
+        )}
       </motion.button>
       <motion.button
         className="reddit"
@@ -262,12 +271,18 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
         <motion.span variants={textLogoVariants}>
           Sign in with Reddit
         </motion.span>
+        {loading === "reddit" && (
+          <Spinner className="loader" count={12} speed={1} center_radius={16} />
+        )}
       </motion.button>
       <motion.button className="github" variants={buttonVariants}>
         {Github_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Github
         </motion.span>
+        {loading === "github" && (
+          <Spinner className="loader" count={12} speed={1} center_radius={16} />
+        )}
       </motion.button>
     </motion.div>
   );

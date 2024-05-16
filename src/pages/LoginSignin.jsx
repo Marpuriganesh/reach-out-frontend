@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import "./css files/LoginSignin.scss";
 import SignIn from "../componets/assets/SignIn.svg";
-import { AnimatedWave, CustomInput } from "@reach-out/ui-library";
+import { AnimatedWave, CustomInput, Spinner } from "@reach-out/ui-library";
 import NavBar from "../componets/NavBar";
 import SignInElements from "../componets/SignInElements";
 import { motion, AnimatePresence } from "framer-motion";
@@ -170,11 +170,11 @@ function LoginSignin() {
         exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
       />
 
-      {loadSpinner && (
+      {/* {loadSpinner && (
         <motion.div className="loading-spinner">
           <ScaleLoader color="#ffffff" />
         </motion.div>
-      )}
+      )} */}
 
       <div className="form-container">
         <motion.form
@@ -194,19 +194,30 @@ function LoginSignin() {
             placeholder="Username"
             className="input_text"
             exportInputValue={handleInputUsername}
+            autoComplete="username"
           />
           <CustomInput
             type="password"
             placeholder="Password"
             className="input_text"
             exportInputValue={handleInputPassword}
+            autoComplete="current-password"
           />
           <motion.button
             initial={{ scale: 1.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
+            style={{ color: loadSpinner ? "transparent" : "" }}
           >
-            Log in
+            Log in{" "}
+            {loadSpinner && (
+              <Spinner
+                speed={1}
+                className="loading"
+                center_radius={14}
+                count={12}
+              />
+            )}
           </motion.button>
           <span
             className="a"

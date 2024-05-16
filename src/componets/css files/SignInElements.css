@@ -10,6 +10,7 @@
   gap: 2rem;
 
   button {
+    position: relative;
     background: rgba(0, 0, 0, 0);
     cursor: pointer;
     width: 65%;
@@ -38,6 +39,9 @@
     transition: all 0.2s ease-in-out;
     span {
       width: 100%;
+
+      text-align: justify;
+      padding-inline-start: 1.5rem;
     }
   }
   button:hover {
@@ -80,4 +84,10 @@
   border: none;
   filter: drop-shadow(0 0 10px rgb(37, 37, 37));
   -webkit-filter: drop-shadow(0 0 10px rgb(37, 37, 37));
+}
+
+.loader{
+  position: absolute;
+  right: .5rem;
+  scale: 0.6;
 }

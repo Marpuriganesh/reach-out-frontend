@@ -199,25 +199,35 @@
 }
 
 .form {
-  filter: blur(2px);
+  // filter: blur(2px);
   pointer-events: none;
 }
 
-.loading-spinner {
+// .loading-spinner {
+//   position: absolute;
+//   top: 50%;
+//   width: 80%;
+//   height: 40%;
+
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+
+//   pointer-events: none;
+//   z-index: 500;
+
+//   border-radius: 1rem;
+//   opacity: 0.8;
+// }
+
+.loading {
   position: absolute;
-  top: 50%;
-  width: 80%;
-  height: 40%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  pointer-events: none;
-  z-index: 500;
-
-  border-radius: 1rem;
-  opacity: 0.8;
+  scale: 0.6;
+  .spinner {
+    .spinner_line {
+      background-color: black;
+    }
+  }
 }
 
 .container {
@@ -246,6 +256,10 @@
   -moz-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -ms-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -o-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .container form button:hover {
@@ -257,6 +271,14 @@
   -moz-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -ms-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -o-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.container form button:hover > .loading {
+  .spinner {
+    .spinner_line {
+      background-color: white;
+    }
+  }
 }
 
 .container form button:focus {
