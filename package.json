@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@reach-out/ui-library": "^1.4.0",
-    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.1",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.11.28",
