@@ -244,7 +244,11 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       animate="visible"
       exit="exit"
     >
-      <motion.button className="google" variants={buttonVariants}>
+      <motion.button
+        className="google"
+        variants={buttonVariants}
+        onClick={() => setLoading("google")}
+      >
         {Google_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Google
