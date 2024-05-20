@@ -7,6 +7,7 @@ import { setReddit, clearRedditState } from "../auth_state/reddit";
 import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
 import { Spinner } from "@reach-out/ui-library";
+import { LoginSocialGoogle,LoginSocialFacebook } from "./SocialAuth";
 
 const textLogoVariants = {
   hidden: { opacity: 0 },
@@ -236,6 +237,14 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     exit: { scale: 0 },
   };
 
+  type objectType = {
+    [key: string]: unknown;
+  };
+  type IResolveParams = {
+    provider: string;
+    data?: objectType;
+  };
+
   return (
     <motion.div
       className="elements_container"
@@ -244,28 +253,57 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       animate="visible"
       exit="exit"
     >
-      <motion.button
-        className="google"
-        variants={buttonVariants}
-        onClick={() => setLoading("google")}
+      <LoginSocialGoogle
+        isOnlyGetToken
+        client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+        onResolve={({ provider, data }: IResolveParams) => {
+          console.log(provider, data);
+        }}
+        onReject={(err: unknown) => {
+          console.log(err);
+        }}
+        className="auth-container"
       >
-        {Google_logo}
-        <motion.span variants={textLogoVariants}>
-          Sign in with Google
-        </motion.span>
-        {loading === "google" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
-      </motion.button>
-      <motion.button className="facebook" variants={buttonVariants}>
-        {Facebook_logo}
-        <motion.span variants={textLogoVariants}>
-          Sign in with Facebook
-        </motion.span>
-        {loading === "facebook" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
-      </motion.button>
+        <motion.button
+          className="google"
+          variants={buttonVariants}
+          onClick={() => setLoading("google")}
+        >
+          {Google_logo}
+          <motion.span variants={textLogoVariants}>
+            Sign in with Google
+          </motion.span>
+          {loading === "google" && (
+            <Spinner
+              className="loader"
+              count={12}
+              speed={1}
+              center_radius={16}
+            />
+          )}
+        </motion.button>
+      </LoginSocialGoogle>
+      <LoginSocialFacebook
+       isOnlyGetToken
+       appId={import.meta.env.VITE_FACEBOOK_APP_ID}
+       onResolve={({ provider, data }: IResolveParams) => {
+         console.log(provider, data)
+       }}
+       onReject={(err:unknown) => {
+         console.log(err)
+       }}
+       className='auth-container'
+      >
+        <motion.button className="facebook" variants={buttonVariants}>
+          {Facebook_logo}
+          <motion.span variants={textLogoVariants}>
+            Sign in with Facebook
+          </motion.span>
+          {loading === "facebook" && (
+            <Spinner className="loader" count={12} speed={1} center_radius={16} />
+          )}
+        </motion.button>
+      </LoginSocialFacebook>
       <motion.button
         className="reddit"
         variants={buttonVariants}

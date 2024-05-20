@@ -1757,10 +1757,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@reach-out/ui-library@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.4.0.tgz#eb462fc284cd2fcd124f36d92da3a68b58333104"
-  integrity sha512-fATrTWPTMR62fNhnbleyq/3Xt+0MZWprEnp9+r0/2LQkywIxJAYcGlY2a6qYiWgvjbyz2y+xiGEw373NFn1quQ==
+"@reach-out/ui-library@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.4.1.tgz#7f2e857b5a8891c747c3501d81fd10926fbdbafc"
+  integrity sha512-XrT3YP3imblZRblj/H6kIyuk4qTVv9QB/hr59iLT6Vne2gi84gKzdiMH+pFQnJyqOwbYaWaiBmLzKrJdCSbhkQ==
   dependencies:
     framer-motion "^11.0.8"
     lodash.throttle "^4.1.1"
@@ -3839,6 +3839,11 @@ react@^18.2.0:
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
+
+reactjs-social-login@^2.6.3:
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/reactjs-social-login/-/reactjs-social-login-2.6.3.tgz#41bc6006346e3c69b387854db920be121a3fc7dc"
+  integrity sha512-i/pcyJPtlVpHoPRr/j5/KjaP/GNxAInnnHDk0PD2Zo0B3cMdvr0ZiGC/GMjOKAAgKCujyniDf/OiZ7c6MrOLQg==
 
 readdirp@~3.6.0:
   version "3.6.0"

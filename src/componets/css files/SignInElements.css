@@ -9,6 +9,14 @@
     outline-offset: 1px; */
   gap: 2rem;
 
+  .auth-container{
+    /* outline: 1px solid white; */
+    width: 65%;
+    button{
+      width: 100%;
+    }
+  }
+
   button {
     position: relative;
     background: rgba(0, 0, 0, 0);

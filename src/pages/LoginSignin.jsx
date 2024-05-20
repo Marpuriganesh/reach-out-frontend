@@ -209,14 +209,24 @@ function LoginSignin() {
             transition={{ delay: 0.3, type: "spring" }}
             style={{ color: loadSpinner ? "transparent" : "" }}
           >
-            Log in{" "}
+            Log in
+            
             {loadSpinner && (
+              <motion.div
+              style={{ position: "absolute" }}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { duration: 0.5, delay: 0.3 },
+              }}
+            >
               <Spinner
                 speed={1}
                 className="loading"
                 center_radius={14}
                 count={12}
               />
+            </motion.div>
             )}
           </motion.button>
           <span
