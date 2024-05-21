@@ -3,10 +3,12 @@ import React, { useState, useCallback } from "react";
 import "./css files/InsertUserElements.css";
 import { CustomInput } from "@reach-out/ui-library";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 interface InsertProps {
   provider_auth_token: string;
   provider: string;
+  getAuthorized: (username: string, password: string) => void;
 }
 
 const containerVariants = {
@@ -58,9 +60,29 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
       pseudoUsername,
       password,
       retypePassword,
-      Props.provider_auth_token,
+      // Props.provider_auth_token,
       Props.provider
     );
+    const data = {
+      username: username,
+      password: password,
+      pseudo_name: pseudoUsername,
+    };
+
+    axios
+      .patch(import.meta.env.VITE_UPDATE_USER_URL, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Props.provider} ${Props.provider_auth_token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        Props.getAuthorized(username, password);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (

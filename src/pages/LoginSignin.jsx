@@ -11,6 +11,7 @@ import { login, logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
 import { ScaleLoader, BarLoader } from "react-spinners";
 import InsertUserElements from "../componets/InsertUserElements";
+import { useLocation } from "react-router-dom";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -30,6 +31,33 @@ function LoginSignin() {
   //debug
   const [currentTime, setCurrentTime] = useState(Date.now());
 
+  const location = useLocation();
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const stateParam = searchParams.get("state");
+    const codeParam = searchParams.get("code");
+    const error = searchParams.get("error");
+
+    // console.log(stateParam, codeParam);
+
+    // Check if both parameters are present
+    if (stateParam && codeParam) {
+      window.opener.postMessage(
+        { state: stateParam, code: codeParam },
+        // "http://localhost:3000/"
+        "https://www.reach-out.in/"
+      );
+      window.close();
+    }
+    if (error) {
+      window.opener.postMessage(
+        { state: stateParam, error: error },
+        // "http://localhost:3000/"
+        "https://www.reach-out.in/"
+      );
+      window.close();
+    }
+  }, [location.search]);
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
@@ -51,51 +79,58 @@ function LoginSignin() {
     setPath("/insert");
   }, []);
 
-  const handleInputUsername = (value) => {
+  const handleInputUsername = useCallback((value) => {
     setUsername(value);
-  };
+  }, []);
 
-  const handleInputPassword = (value) => {
+  const handleInputPassword = useCallback((value) => {
     setPassword(value);
-  };
+  }, []);
+
+  const getAuthorized = useCallback(
+    (username, password) => {
+      const requestData = {
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        client_secret: import.meta.env.VITE_CLIENT_SECRET,
+        grant_type: "password",
+        username: username,
+        password: password,
+      };
+      axios
+        .post(import.meta.env.VITE_TOKEN_URL, requestData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("Response:", response.data);
+          console.log("Access Token:", response.data.access_token);
+          console.log("Refresh Token:", response.data.refresh_token);
+          const login_data = {
+            user: username,
+            auth_token: response.data.access_token,
+            refresh_token: response.data.refresh_token,
+            expires_in: response.data.expires_in,
+            expire_timestamp: response.data.expire_timestamp,
+          };
+          setLoadSpinner(false);
+          dispatch(login(login_data));
+          setPath("/");
+        })
+        .catch((error) => {
+          setLoadSpinner(false);
+          console.error("Error:", error.response.data);
+        });
+    },
+    [dispatch]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setLoadSpinner(true);
 
-    const requestData = {
-      client_id: import.meta.env.VITE_CLIENT_ID,
-      client_secret: import.meta.env.VITE_CLIENT_SECRET,
-      grant_type: "password",
-      username: username,
-      password: password,
-    };
-
-    axios
-      .post(import.meta.env.VITE_TOKEN_URL, requestData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log("Response:", response.data);
-        console.log("Access Token:", response.data.access_token);
-        console.log("Refresh Token:", response.data.refresh_token);
-        const login_data = {
-          user: username,
-          auth_token: response.data.access_token,
-          refresh_token: response.data.refresh_token,
-          expires_in: response.data.expires_in,
-          expire_timestamp: response.data.expire_timestamp,
-        };
-        setLoadSpinner(false);
-        dispatch(login(login_data));
-      })
-      .catch((error) => {
-        setLoadSpinner(false);
-        console.error("Error:", error.response.data);
-      });
+    getAuthorized(username, password);
   };
 
   // const [isChecked, setIsChecked] = useState(false);
@@ -210,23 +245,22 @@ function LoginSignin() {
             style={{ color: loadSpinner ? "transparent" : "" }}
           >
             Log in
-            
             {loadSpinner && (
               <motion.div
-              style={{ position: "absolute" }}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                transition: { duration: 0.5, delay: 0.3 },
-              }}
-            >
-              <Spinner
-                speed={1}
-                className="loading"
-                center_radius={14}
-                count={12}
-              />
-            </motion.div>
+                style={{ position: "absolute" }}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.5, delay: 0.3 },
+                }}
+              >
+                <Spinner
+                  speed={1}
+                  className="loading"
+                  center_radius={14}
+                  count={12}
+                />
+              </motion.div>
             )}
           </motion.button>
           <span
@@ -273,6 +307,7 @@ function LoginSignin() {
                     <InsertUserElements
                       provider={provider}
                       provider_auth_token={provider_auth_token}
+                      getAuthorized={getAuthorized}
                     />
                   </>
                 ) : (
