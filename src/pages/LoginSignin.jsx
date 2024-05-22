@@ -69,7 +69,7 @@ function LoginSignin() {
       window.close();
     }
     // New hash parameter logic
-    if (accessToken && tokenType && expiresIn) {
+    if (accessToken) {
       window.opener.postMessage(
         {
           access_token: accessToken,

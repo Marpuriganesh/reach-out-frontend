@@ -206,7 +206,10 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     ) {
       fetchAccessToken();
     }
-    if (data?.access_token !== undefined && provider === "google-oauth2") {
+    if (
+      data?.access_token !== undefined &&
+      (provider === "google-oauth2" || provider === "facebook")
+    ) {
       providerInfo(data.access_token, provider);
     }
 
