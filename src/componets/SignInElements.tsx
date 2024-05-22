@@ -249,7 +249,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
         import.meta.env.VITE_FACEBOOK_APP_ID
       }&redirect_uri=${
         import.meta.env.VITE_FACEBOOK_REDIRECT_URL
-      }&scope=email,user_profile&state={"{st=state123abc,ds=123456789}"}`,
+      }&state={"{st=state123abc,ds=123456789}"}&response_type=token`,
       "facebook login",
       "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
     );
