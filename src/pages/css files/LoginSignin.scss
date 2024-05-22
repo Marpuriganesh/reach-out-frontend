@@ -272,7 +272,7 @@
   -o-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
-.container form button:hover > .loading {
+.container form button:hover > div .loading {
   .spinner {
     .spinner_line {
       background-color: white;
@@ -433,6 +433,10 @@ $numberOfWaves: 3;
   .motion-div {
     scale: 0.55;
   }
+  html {
+    width: 100dvw;
+    height: 100dvh;
+  }
 }
 
 /* Mobile Devices (Portrait) */
@@ -445,5 +449,9 @@ $numberOfWaves: 3;
   }
   .nav-bar {
     display: none;
+  }
+  html {
+    width: 100dvw;
+    height: 100dvh;
   }
 }

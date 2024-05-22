@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
-import { Spinner } from "@reach-out/ui-library";
+// import { Spinner } from "@reach-out/ui-library";
 
 const textLogoVariants = {
   hidden: { opacity: 0 },
@@ -150,15 +150,19 @@ interface SignInElementsProps {
 const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
   const reddit_client_id = import.meta.env.VITE_REEDIT_CLIENT_ID;
+  const google_client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const google_redirect_uri = import.meta.env.VITE_GOOGLE_REDIRECT_URL;
   const reddit_client_secret = import.meta.env.VITE_REDDIT_CLIENT_SECRET;
   const reddit_redirect_uri = import.meta.env.VITE_REDDIT_REDIRECT_URL;
 
   type Data = {
     state: string;
     code: string;
+    access_token: string;
   };
   const [data, setData] = useState<Data | null>(null);
-  const [loading, setLoading] = useState("");
+  const [provider, setProvider] = useState<string>("");
+  // const [loading, setLoading] = useState("");
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -180,7 +184,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
           console.log("reddit date:", response.data);
           const accessToken = response.data.access_token;
           console.log("Reddit Access Token:", accessToken);
-          providerInfo(accessToken, "reddit");
+          providerInfo(accessToken, provider);
 
           setData(null);
         })
@@ -191,12 +195,19 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
 
     const handleMessage = (event: MessageEvent) => {
       // console.log(event.origin);
-      // console.log(event.data);
+      console.log(event.data);
       setData(event.data);
     };
 
-    if (data?.state !== undefined && data?.code !== undefined) {
+    if (
+      data?.state !== undefined &&
+      data?.code !== undefined &&
+      provider === "reddit"
+    ) {
       fetchAccessToken();
+    }
+    if (data?.access_token !== undefined && provider === "google-oauth2") {
+      providerInfo(data.access_token, provider);
     }
 
     window.addEventListener("message", handleMessage);
@@ -210,12 +221,36 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     reddit_client_secret,
     reddit_redirect_uri,
     providerInfo,
+    provider,
   ]);
 
   const redditLogin = () => {
+    setProvider("reddit");
     window.open(
       `https://www.reddit.com/api/v1/authorize?client_id=${reddit_client_id}&response_type=code&state=yolo&redirect_uri=${reddit_redirect_uri}&duration=temporary&scope=identity,account`,
       "reddit login",
+      "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
+    );
+  };
+
+  const googleLogin = () => {
+    setProvider("google-oauth2");
+    window.open(
+      `https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${google_client_id}&redirect_uri=${google_redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile
+      `,
+      "google login",
+      "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
+    );
+  };
+  const facebookLogin = () => {
+    setProvider("facebook");
+    window.open(
+      `https://www.facebook.com/v20.0/dialog/oauth?client_id=${
+        import.meta.env.VITE_FACEBOOK_APP_ID
+      }&redirect_uri=${
+        import.meta.env.VITE_FACEBOOK_REDIRECT_URL
+      }&scope=email,user_profile&state={"{st=state123abc,ds=123456789}"}`,
+      "facebook login",
       "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
     );
   };
@@ -243,24 +278,22 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       <motion.button
         className="google"
         variants={buttonVariants}
-        onClick={() => setLoading("google")}
+        onClick={googleLogin}
       >
         {Google_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Google
         </motion.span>
-        {loading === "google" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
       </motion.button>
-      <motion.button className="facebook" variants={buttonVariants}>
+      <motion.button
+        className="facebook"
+        variants={buttonVariants}
+        onClick={facebookLogin}
+      >
         {Facebook_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Facebook
         </motion.span>
-        {loading === "facebook" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
       </motion.button>
       <motion.button
         className="reddit"
@@ -271,18 +304,12 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
         <motion.span variants={textLogoVariants}>
           Sign in with Reddit
         </motion.span>
-        {loading === "reddit" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
       </motion.button>
       <motion.button className="github" variants={buttonVariants}>
         {Github_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Github
         </motion.span>
-        {loading === "github" && (
-          <Spinner className="loader" count={12} speed={1} center_radius={16} />
-        )}
       </motion.button>
     </motion.div>
   );

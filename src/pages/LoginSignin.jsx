@@ -12,6 +12,7 @@ import axios from "axios";
 import { ScaleLoader, BarLoader } from "react-spinners";
 import InsertUserElements from "../componets/InsertUserElements";
 import { useLocation } from "react-router-dom";
+import { deviceType, osName, isMobile } from "react-device-detect";
 
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
@@ -33,31 +34,87 @@ function LoginSignin() {
 
   const location = useLocation();
   useEffect(() => {
+    // Handle search parameters
     const searchParams = new URLSearchParams(location.search);
     const stateParam = searchParams.get("state");
     const codeParam = searchParams.get("code");
-    const error = searchParams.get("error");
+    let error = searchParams.get("error");
 
-    // console.log(stateParam, codeParam);
+    // Handle hash parameters
+    const hashString = window.location.hash.substring(1); // Remove the leading '#'
+    const hashParams = new URLSearchParams(hashString);
+    const accessToken = hashParams.get("access_token");
+    const tokenType = hashParams.get("token_type");
+    const expiresIn = hashParams.get("expires_in");
+    const scope = hashParams.get("scope");
+    if (hashParams.get("error")) {
+      error = hashParams.get("error");
+    }
 
     // Check if both parameters are present
     if (stateParam && codeParam) {
       window.opener.postMessage(
         { state: stateParam, code: codeParam },
-        // "http://localhost:3000/"
-        "https://www.reach-out.in/"
+        "http://localhost:3000/"
+        // "https://www.reach-out.in/"
       );
       window.close();
     }
     if (error) {
       window.opener.postMessage(
         { state: stateParam, error: error },
-        // "http://localhost:3000/"
-        "https://www.reach-out.in/"
+        "http://localhost:3000/"
+        // "https://www.reach-out.in/"
       );
       window.close();
     }
-  }, [location.search]);
+    // New hash parameter logic
+    if (accessToken && tokenType && expiresIn) {
+      window.opener.postMessage(
+        {
+          access_token: accessToken,
+          token_type: tokenType,
+          expires_in: expiresIn,
+          scope: scope,
+        },
+        // "https://www.reach-out.in/"
+        "http://localhost:3000/"
+      );
+      window.close();
+    }
+  }, [location.search, location.hash]);
+
+  useEffect(() => {
+    console.log(
+      "deviceType: ",
+      deviceType,
+      "osName: ",
+      osName,
+      "isMobile: ",
+      isMobile
+    );
+
+    // console.log('Device Type:', getDeviceType());
+    function detectDeviceType() {
+      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.screen.width <= 800;
+
+      if (isTouch && isSmallScreen) {
+        return "Mobile";
+      } else {
+        return "Desktop";
+      }
+    }
+
+    console.log("Device Type(screen width): ", detectDeviceType());
+    console.log(
+      "device width:",
+      window.screen.width,
+      "device height:",
+      window.screen.height
+    );
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
@@ -204,12 +261,6 @@ function LoginSignin() {
         transition={{ delay: 0.1, duration: 0.4 }}
         exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
       />
-
-      {/* {loadSpinner && (
-        <motion.div className="loading-spinner">
-          <ScaleLoader color="#ffffff" />
-        </motion.div>
-      )} */}
 
       <div className="form-container">
         <motion.form
