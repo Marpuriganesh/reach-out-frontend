@@ -55,16 +55,16 @@ function LoginSignin() {
     if (stateParam && codeParam) {
       window.opener.postMessage(
         { state: stateParam, code: codeParam },
-        "http://localhost:3000/"
-        // "https://www.reach-out.in/"
+        // "http://localhost:3000/"
+        "https://www.reach-out.in/"
       );
       window.close();
     }
     if (error) {
       window.opener.postMessage(
         { state: stateParam, error: error },
-        "http://localhost:3000/"
-        // "https://www.reach-out.in/"
+        // "http://localhost:3000/"
+        "https://www.reach-out.in/"
       );
       window.close();
     }
@@ -77,8 +77,8 @@ function LoginSignin() {
           expires_in: expiresIn,
           scope: scope,
         },
-        // "https://www.reach-out.in/"
-        "http://localhost:3000/"
+        "https://www.reach-out.in/"
+        // "http://localhost:3000/"
       );
       window.close();
     }
