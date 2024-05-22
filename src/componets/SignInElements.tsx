@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
-// import { Spinner } from "@reach-out/ui-library";
 
 const textLogoVariants = {
   hidden: { opacity: 0 },
