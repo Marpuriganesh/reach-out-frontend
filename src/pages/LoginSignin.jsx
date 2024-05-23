@@ -40,37 +40,15 @@ function LoginSignin() {
     const codeParam = searchParams.get("code");
     let error = searchParams.get("error");
 
-    // Handle hash parameters
-    const hashString = window.location.hash.substring(1); // Remove the leading '#'
-    const hashParams = new URLSearchParams(hashString);
-    const accessToken = hashParams.get("access_token");
-    const tokenType = hashParams.get("token_type");
-    const expiresIn = hashParams.get("expires_in");
-    const scope = hashParams.get("scope");
-    if (hashParams.get("error")) {
-      error = hashParams.get("error");
-    }
-
-    if (stateParam && codeParam) {
-      const channel = new BroadcastChannel('auth-communication');
+    if (codeParam) {
+      const channel = new BroadcastChannel("auth-communication");
       channel.postMessage({ state: stateParam, code: codeParam });
       window.close();
     }
-  
+
     if (error) {
-      const channel = new BroadcastChannel('auth-communication');
+      const channel = new BroadcastChannel("auth-communication");
       channel.postMessage({ state: stateParam, error: error });
-      window.close();
-    }
-  
-    if (accessToken) {
-      const channel = new BroadcastChannel('auth-communication');
-      channel.postMessage({
-        access_token: accessToken,
-        token_type: tokenType,
-        expires_in: expiresIn,
-        scope: scope,
-      });
       window.close();
     }
   }, [location.search, location.hash]);

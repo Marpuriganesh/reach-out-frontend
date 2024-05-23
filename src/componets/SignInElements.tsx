@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./css files/SignInElements.css";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
 
 const textLogoVariants = {
@@ -153,7 +153,9 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   const google_redirect_uri = import.meta.env.VITE_GOOGLE_REDIRECT_URL;
   const reddit_client_secret = import.meta.env.VITE_REDDIT_CLIENT_SECRET;
   const reddit_redirect_uri = import.meta.env.VITE_REDDIT_REDIRECT_URL;
-
+  const github_redirect_uri = import.meta.env.VITE_GITHUB_REDIRECT_URL;
+  const github_client_secret = import.meta.env.VITE_GITHUB_CLIENT_SECRET;
+  const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
   type Data = {
     state: string;
     code: string;
@@ -166,30 +168,71 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   useEffect(() => {
     const fetchAccessToken = async () => {
       console.log(`data: ${data?.state}, ${data?.code}`);
-      const code = data?.code;
-      const encodedHeader = btoa(`${reddit_client_id}:${reddit_client_secret}`);
-      axios
-        .post(
-          "https://www.reddit.com/api/v1/access_token",
-          `grant_type=authorization_code&code=${code}&redirect_uri=${reddit_redirect_uri}`,
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Basic ${encodedHeader}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log("reddit date:", response.data);
-          const accessToken = response.data.access_token;
-          console.log("Reddit Access Token:", accessToken);
-          providerInfo(accessToken, provider);
+      // const code = data?.code;
+      // const encodedHeader = btoa(`${reddit_client_id}:${reddit_client_secret}`);
+      const fetchTokenFromServer = (data: Data | null, provider: string) => {
+        console.log("code need to be implemented in the backend");
+        console.log("data: ", data, "provider: ", provider);
+      };
 
-          setData(null);
-        })
-        .catch((error) => {
-          console.error("Error exchanging code for token:", error);
-        });
+      fetchTokenFromServer(data, provider);
+      // const redditToken = () => {
+      //   axios
+      //     .post(
+      //       "https://www.reddit.com/api/v1/access_token",
+      //       `grant_type=authorization_code&code=${code}&redirect_uri=${reddit_redirect_uri}`,
+      //       {
+      //         headers: {
+      //           "Content-Type": "application/x-www-form-urlencoded",
+      //           Authorization: `Basic ${encodedHeader}`,
+      //         },
+      //       }
+      //     )
+      //     .then((response) => {
+      //       console.log("reddit date:", response.data);
+      //       const accessToken = response.data.access_token;
+      //       console.log("Reddit Access Token:", accessToken);
+      //       providerInfo(accessToken, provider);
+
+      //       setData(null);
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error exchanging code for token:", error);
+      //     });
+      // };
+
+      // const githubToken = () => {
+      //   console.log("Github code:", code);
+      //   axios
+      //     .post("https://github.com/login/oauth/access_token", {
+      //       client_id: github_client_id,
+      //       client_secret: github_client_secret,
+      //       code: code,
+      //       grant_type: "authorization_code",
+      //       redirect_uri: github_redirect_uri,
+      //     })
+      //     .then((response) => {
+      //       const accessToken = response.data.access_token;
+      //       console.log("GitHub Access Token:", accessToken);
+      //       providerInfo(accessToken, provider);
+      //       setData(null);
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error exchanging code for token:", error);
+      //     });
+      // };
+      // switch (provider) {
+      //   case "reddit":
+      //     redditToken();
+      //     break;
+      //   case "github":
+      //     githubToken();
+      //     break;
+      //   case "google-oauth2":
+      //     break;
+      //   case "facebook":
+      //     break;
+      // }
     };
     const channel = new BroadcastChannel("auth-communication");
 
@@ -199,18 +242,8 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
       setData(event.data);
     };
 
-    if (
-      data?.state !== undefined &&
-      data?.code !== undefined &&
-      provider === "reddit"
-    ) {
+    if (data?.code !== undefined) {
       fetchAccessToken();
-    }
-    if (
-      data?.access_token !== undefined &&
-      (provider === "google-oauth2" || provider === "facebook")
-    ) {
-      providerInfo(data.access_token, provider);
     }
     channel.addEventListener("message", handleMessage);
 
@@ -225,35 +258,61 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     reddit_redirect_uri,
     providerInfo,
     provider,
+    github_client_id,
+    github_client_secret,
+    github_redirect_uri,
   ]);
 
   const redditLogin = () => {
+    setData(null);
+
     setProvider("reddit");
     window.open(
-      `https://www.reddit.com/api/v1/authorize?client_id=${reddit_client_id}&response_type=code&state=yolo&redirect_uri=${reddit_redirect_uri}&duration=temporary&scope=identity,account`,
+      `https://www.reddit.com/api/v1/authorize?client_id=${reddit_client_id}&response_type=code&state=${
+        import.meta.env.VITE_OAUTH_STATE
+      }&redirect_uri=${reddit_redirect_uri}&duration=temporary&scope=identity,account`,
       "reddit login",
       "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
     );
   };
 
   const googleLogin = () => {
+    setData(null);
+
     setProvider("google-oauth2");
     window.open(
-      `https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${google_client_id}&redirect_uri=${google_redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile
+      `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${google_client_id}&redirect_uri=${google_redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile&state=${
+        import.meta.env.VITE_OAUTH_STATE
+      }
       `,
       "google login",
       "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
     );
   };
   const facebookLogin = () => {
+    setData(null);
+
     setProvider("facebook");
     window.open(
       `https://www.facebook.com/v20.0/dialog/oauth?client_id=${
         import.meta.env.VITE_FACEBOOK_APP_ID
-      }&redirect_uri=${
-        import.meta.env.VITE_FACEBOOK_REDIRECT_URL
-      }&state={"{st=state123abc,ds=123456789}"}&response_type=token`,
+      }&redirect_uri=${import.meta.env.VITE_FACEBOOK_REDIRECT_URL}&state=${
+        import.meta.env.VITE_OAUTH_STATE
+      }&response_type=code`,
       "facebook login",
+      "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
+    );
+  };
+
+  const githubLogin = () => {
+    setData(null);
+
+    setProvider("github");
+    window.open(
+      `https://github.com/login/oauth/authorize?client_id=${github_client_id}&redirect_uri=${github_redirect_uri}&scope=repo,user:email&response_type=code&state=${
+        import.meta.env.VITE_OAUTH_STATE
+      }`,
+      "github login",
       "width=1200,height=800,toolbar=no,location=no,menubar=no,scrollbars=no"
     );
   };
@@ -308,7 +367,11 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
           Sign in with Reddit
         </motion.span>
       </motion.button>
-      <motion.button className="github" variants={buttonVariants}>
+      <motion.button
+        className="github"
+        variants={buttonVariants}
+        onClick={githubLogin}
+      >
         {Github_logo}
         <motion.span variants={textLogoVariants}>
           Sign in with Github
