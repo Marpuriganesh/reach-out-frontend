@@ -199,26 +199,8 @@
 }
 
 .form {
-  // filter: blur(2px);
   pointer-events: none;
 }
-
-// .loading-spinner {
-//   position: absolute;
-//   top: 50%;
-//   width: 80%;
-//   height: 40%;
-
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   pointer-events: none;
-//   z-index: 500;
-
-//   border-radius: 1rem;
-//   opacity: 0.8;
-// }
 
 .loading {
   scale: 0.6;
