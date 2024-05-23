@@ -191,10 +191,11 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
           console.error("Error exchanging code for token:", error);
         });
     };
+    const channel = new BroadcastChannel("auth-communication");
 
     const handleMessage = (event: MessageEvent) => {
-      // console.log(event.origin);
       console.log(event.data);
+      channel.close();
       setData(event.data);
     };
 
@@ -211,10 +212,10 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     ) {
       providerInfo(data.access_token, provider);
     }
+    channel.addEventListener("message", handleMessage);
 
-    window.addEventListener("message", handleMessage);
     return () => {
-      window.removeEventListener("message", handleMessage);
+      channel.removeEventListener("message", handleMessage);
     };
   }, [
     data,

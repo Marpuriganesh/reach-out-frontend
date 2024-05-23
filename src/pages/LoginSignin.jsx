@@ -51,35 +51,26 @@ function LoginSignin() {
       error = hashParams.get("error");
     }
 
-    // Check if both parameters are present
     if (stateParam && codeParam) {
-      window.opener.postMessage(
-        { state: stateParam, code: codeParam },
-        // "http://localhost:3000/"
-        "https://www.reach-out.in/"
-      );
+      const channel = new BroadcastChannel('auth-communication');
+      channel.postMessage({ state: stateParam, code: codeParam });
       window.close();
     }
+  
     if (error) {
-      window.opener.postMessage(
-        { state: stateParam, error: error },
-        // "http://localhost:3000/"
-        "https://www.reach-out.in/"
-      );
+      const channel = new BroadcastChannel('auth-communication');
+      channel.postMessage({ state: stateParam, error: error });
       window.close();
     }
-    // New hash parameter logic
+  
     if (accessToken) {
-      window.opener.postMessage(
-        {
-          access_token: accessToken,
-          token_type: tokenType,
-          expires_in: expiresIn,
-          scope: scope,
-        },
-        "https://www.reach-out.in/"
-        // "http://localhost:3000/"
-      );
+      const channel = new BroadcastChannel('auth-communication');
+      channel.postMessage({
+        access_token: accessToken,
+        token_type: tokenType,
+        expires_in: expiresIn,
+        scope: scope,
+      });
       window.close();
     }
   }, [location.search, location.hash]);
