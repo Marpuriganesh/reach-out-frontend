@@ -291,7 +291,7 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     window.open(
       `https://www.facebook.com/v20.0/dialog/oauth?client_id=${
         import.meta.env.VITE_FACEBOOK_APP_ID
-      }&redirect_uri=${import.meta.env.VITE_FACEBOOK_REDIRECT_URL}&state=${
+      }&redirect_uri=${import.meta.env.VITE_OAUTH_REDIRECT_URL}&state=${
         import.meta.env.VITE_OAUTH_STATE
       }&response_type=code`,
       "facebook login",
