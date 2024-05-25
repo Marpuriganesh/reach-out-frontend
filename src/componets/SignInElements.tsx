@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./css files/SignInElements.css";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-// import axios from "axios";
+import axios from "axios";
 import { AppDispatch } from "../auth_state/store";
 
 const textLogoVariants = {
@@ -161,75 +161,31 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   };
   const [data, setData] = useState<Data | null>(null);
   const [provider, setProvider] = useState<string>("");
-  // const [loading, setLoading] = useState("");
 
   useEffect(() => {
     const fetchAccessToken = async () => {
-      console.log(`data: ${data?.state}, ${data?.code}`);
-      // const code = data?.code;
       const fetchTokenFromServer = (data: Data | null, provider: string) => {
-        console.log("code need to be implemented in the backend");
-        console.log("data: ", data, "provider: ", provider);
+        const params = {
+          code: data?.code,
+          state: data?.state,
+          redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URL,
+          provider: provider,
+        };
+
+        axios
+          .post(import.meta.env.VITE_REQUEST_ACCESS_TOKEN_URL, null, { params })
+          .then((response) => {
+            const accessToken = response.data.access_token;
+            // remove this after
+            console.log("Access Token:", accessToken);
+            providerInfo(accessToken, provider);
+          })
+          .catch((error) => {
+            console.error("Error exchanging code for token:", error);
+          });
       };
 
       fetchTokenFromServer(data, provider);
-      // const redditToken = () => {
-      //   axios
-      //     .post(
-      //       "https://www.reddit.com/api/v1/access_token",
-      //       `grant_type=authorization_code&code=${code}&redirect_uri=${reddit_redirect_uri}`,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/x-www-form-urlencoded",
-      //           Authorization: `Basic ${encodedHeader}`,
-      //         },
-      //       }
-      //     )
-      //     .then((response) => {
-      //       console.log("reddit date:", response.data);
-      //       const accessToken = response.data.access_token;
-      //       console.log("Reddit Access Token:", accessToken);
-      //       providerInfo(accessToken, provider);
-
-      //       setData(null);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error exchanging code for token:", error);
-      //     });
-      // };
-
-      // const githubToken = () => {
-      //   console.log("Github code:", code);
-      //   axios
-      //     .post("https://github.com/login/oauth/access_token", {
-      //       client_id: github_client_id,
-      //       client_secret: github_client_secret,
-      //       code: code,
-      //       grant_type: "authorization_code",
-      //       redirect_uri: github_redirect_uri,
-      //     })
-      //     .then((response) => {
-      //       const accessToken = response.data.access_token;
-      //       console.log("GitHub Access Token:", accessToken);
-      //       providerInfo(accessToken, provider);
-      //       setData(null);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error exchanging code for token:", error);
-      //     });
-      // };
-      // switch (provider) {
-      //   case "reddit":
-      //     redditToken();
-      //     break;
-      //   case "github":
-      //     githubToken();
-      //     break;
-      //   case "google-oauth2":
-      //     break;
-      //   case "facebook":
-      //     break;
-      // }
     };
     const channel = new BroadcastChannel("auth-communication");
 
