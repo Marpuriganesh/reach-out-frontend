@@ -105,6 +105,10 @@ function LoginSignin() {
     setPath("/insert");
   }, []);
 
+  const changePath = useCallback((path) => {
+    setPath(path);
+  }, []);
+
   const handleInputUsername = useCallback((value) => {
     setUsername(value);
   }, []);
@@ -315,11 +319,13 @@ function LoginSignin() {
                   ? "-180deg"
                   : path === "/insert"
                   ? "-360deg"
+                  : path === "/loginafterinsert"
+                  ? "-180deg"
                   : "0deg",
             }}
           >
             <AnimatePresence mode="wait">
-              <motion.div key={path} className="motion-div">
+              <motion.div key={path} className="motion-div" style={{transform: `${path === "/loginafterinsert" ? "rotateY(180deg)" : "none"}`}}>
                 {path === "/signin" ? (
                   formSingup
                 ) : path === "/insert" ? (
@@ -327,7 +333,7 @@ function LoginSignin() {
                     <InsertUserElements
                       provider={provider}
                       provider_auth_token={provider_auth_token}
-                      getAuthorized={getAuthorized}
+                      changePath={changePath}
                     />
                   </>
                 ) : (

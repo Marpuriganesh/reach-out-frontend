@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useCallback } from "react";
 import "./css files/InsertUserElements.css";
-import { CustomInput } from "@reach-out/ui-library";
+import { CustomInput, Spinner } from "@reach-out/ui-library";
 import { motion } from "framer-motion";
 import axios from "axios";
 
 interface InsertProps {
   provider_auth_token: string;
   provider: string;
-  getAuthorized: (username: string, password: string) => void;
+  changePath: (provider: string) => void;
 }
 
 const containerVariants = {
@@ -39,6 +39,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   const [pseudoUsername, setPseudoUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [retypePassword, setRetypePassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleInputUsername = useCallback((value: string) => {
     setUsername(value);
@@ -55,6 +56,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
 
   function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     console.log(
       username,
       pseudoUsername,
@@ -78,7 +80,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
       })
       .then((response) => {
         console.log(response.data);
-        Props.getAuthorized(username, password);
+        Props.changePath("/loginafterinsert");
       })
       .catch((error) => {
         console.error(error);
@@ -95,7 +97,10 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
         animate="visible"
         exit="exit"
       >
-        <motion.form onSubmit={handleFormSubmit}>
+        <motion.form
+          onSubmit={handleFormSubmit}
+          className={loading ? "form" : ""}
+        >
           <span>Fill in the details</span>
 
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -136,7 +141,29 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
           </motion.div>
 
           <motion.div className="line" variants={lineVariants} />
-          <motion.button variants={buttonVariants}>Sign in</motion.button>
+          <motion.button
+            variants={buttonVariants}
+            style={{ color: loading ? "transparent" : "" }}
+          >
+            Sign in
+            {loading && (
+              <motion.div
+                style={{ position: "absolute" }}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.5, delay: 0.3 },
+                }}
+              >
+                <Spinner
+                  speed={1}
+                  className="loading"
+                  center_radius={14}
+                  count={12}
+                />
+              </motion.div>
+            )}
+          </motion.button>
         </motion.form>
       </motion.div>
     </motion.div>
