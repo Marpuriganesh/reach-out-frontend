@@ -150,11 +150,9 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
   const reddit_client_id = import.meta.env.VITE_REEDIT_CLIENT_ID;
   const google_client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const google_redirect_uri = import.meta.env.VITE_GOOGLE_REDIRECT_URL;
-  const reddit_client_secret = import.meta.env.VITE_REDDIT_CLIENT_SECRET;
-  const reddit_redirect_uri = import.meta.env.VITE_REDDIT_REDIRECT_URL;
-  const github_redirect_uri = import.meta.env.VITE_GITHUB_REDIRECT_URL;
-  const github_client_secret = import.meta.env.VITE_GITHUB_CLIENT_SECRET;
+  const google_redirect_uri = import.meta.env.VITE_OAUTH_REDIRECT_URL;
+  const reddit_redirect_uri = import.meta.env.VITE_OAUTH_REDIRECT_URL;
+  const github_redirect_uri = import.meta.env.VITE_OAUTH_REDIRECT_URL;
   const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
   type Data = {
     state: string;
@@ -169,7 +167,6 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     const fetchAccessToken = async () => {
       console.log(`data: ${data?.state}, ${data?.code}`);
       // const code = data?.code;
-      // const encodedHeader = btoa(`${reddit_client_id}:${reddit_client_secret}`);
       const fetchTokenFromServer = (data: Data | null, provider: string) => {
         console.log("code need to be implemented in the backend");
         console.log("data: ", data, "provider: ", provider);
@@ -254,12 +251,10 @@ const SignInElements: React.FC<SignInElementsProps> = ({ providerInfo }) => {
     data,
     dispatch,
     reddit_client_id,
-    reddit_client_secret,
     reddit_redirect_uri,
     providerInfo,
     provider,
     github_client_id,
-    github_client_secret,
     github_redirect_uri,
   ]);
 
