@@ -28,6 +28,8 @@ function LoginSignin() {
   const dispatch = useDispatch();
   const expires_in = useSelector((state) => state.auth.expires_in);
   const user = useSelector((state) => state.auth.user);
+  const [error, setError] = useState(false);
+  const [errorType, setErrorType] = useState("");
 
   //debug
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -150,6 +152,11 @@ function LoginSignin() {
         .catch((error) => {
           setLoadSpinner(false);
           console.error("Error:", error.response.data);
+          setErrorType(error.response.data.error_description);
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+          }, 9000);
         });
     },
     [dispatch]
@@ -226,14 +233,38 @@ function LoginSignin() {
       >
         <img id="sign-in" src={SignIn} alt=""></img>
       </motion.div>
-
-      <motion.div
-        className="line"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ delay: 0.1, duration: 0.4 }}
-        exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
-      />
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            className="line"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+            exit={{ scaleX: 0, transition: { duration: 0.4, delay: 0.4 } }}
+          >
+            <motion.span
+              initial={{ opacity: 0, y: 0 }}
+              animate={{
+                opacity: 1,
+                y: -25,
+                transition: { duration: 0.2, delay: 0.3 },
+              }}
+              exit={{
+                opacity: 0,
+                y: 0,
+                transition: {
+                  opacity: { duration: 0.1 },
+                  y: { duration: 0.3 },
+                },
+              }}
+            >
+              {errorType === "Invalid credentials given."
+                ? "Invalid username or password."
+                : errorType}
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="form-container">
         <motion.form
@@ -312,7 +343,7 @@ function LoginSignin() {
         <NavBar className="nav-bar" />
         <div className={`page-container `}>
           <motion.div
-            className={`container`}
+            className={`container ${error ? "blink" : ""}`}
             style={{
               rotateY:
                 path === "/signin"
@@ -325,7 +356,15 @@ function LoginSignin() {
             }}
           >
             <AnimatePresence mode="wait">
-              <motion.div key={path} className="motion-div" style={{transform: `${path === "/loginafterinsert" ? "rotateY(180deg)" : "none"}`}}>
+              <motion.div
+                key={path}
+                className="motion-div"
+                style={{
+                  transform: `${
+                    path === "/loginafterinsert" ? "rotateY(180deg)" : "none"
+                  }`,
+                }}
+              >
                 {path === "/signin" ? (
                   formSingup
                 ) : path === "/insert" ? (

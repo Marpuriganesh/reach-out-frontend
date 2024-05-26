@@ -128,7 +128,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 1rem;
-    // padding: 2rem 0 2rem 0;
+    padding: 2rem 0 2rem 0;
   }
 }
 
@@ -145,10 +145,9 @@
   bottom: 0;
   border-radius: 1rem;
   border: 2px solid transparent;
-  // background: linear-gradient(180deg, rgba(255, 255, 255, 0.788),transparent,transparent, rgba(122, 228, 235, 0.925)) border-box;
+  //background: linear-gradient(180deg, rgba(255, 255, 255, 0.788),transparent,transparent, rgba(122, 228, 235, 0.925)) border-box;
   background: var(--container-border-color) border-box;
-  -webkit-mask: linear-gradient(#ffffff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#ffffff 0 0) padding-box,    linear-gradient(#fff 0 0);
   mask: linear-gradient(#ffffff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
@@ -157,6 +156,37 @@
   -ms-border-radius: 1rem;
   -o-border-radius: 1rem;
   pointer-events: none;
+
+}
+
+.container.blink{
+  animation:error_background_animation 1s linear  infinite alternate;
+  -webkit-animation:error_background_animation 1s linear  infinite alternate;
+}
+
+.container.blink::before{
+  animation: error_outline_animation 1s linear infinite alternate;
+  -webkit-animation: error_outline_animation 1s linear infinite alternate;
+}
+
+@keyframes error_outline_animation {
+  0% {
+    background: linear-gradient(180deg, var(--container-border-color) , var(--container-border-color)) border-box;
+
+  }
+  100%{
+    background: linear-gradient(180deg, var(--container-border-color) ,rgba(244, 62, 25, 0.925)) border-box;
+  }
+}
+
+@keyframes error_background_animation {
+  0%{
+    background: linear-gradient(180deg, var(--container-background) , var(--container-background));
+  }
+  100% {
+    background: linear-gradient(180deg, var(--container-background) , rgba(244, 61, 25, 0.155));
+  }
+  
 }
 
 .signin {
@@ -298,13 +328,20 @@
 }
 
 .line {
-  /* position: absolute; */
+  position: absolute;
   pointer-events: none;
-  /* margin-top: 8%; */
+  top:50%;
   width: 75%;
   height: 1px;
   // background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.514), transparent);
-  background: rgba(255, 255, 255, 0.929);
+  background: rgba(255, 255, 255, 0.526);
+  display: flex;
+  justify-content: center;
+  span{
+    // position: absolute;
+    color: rgba(255, 255, 255, 0.558);
+    
+  }
 }
 
 // Define the number of waves
@@ -360,7 +397,7 @@ $numberOfWaves: 3;
     --signInLogo-scale: 70%;
     --container-width: 25%;
     --container-height: 80cqh;
-    --input_text-margin-top: 7%;
+    --input_text-margin-top: 8%;
   }
 }
 
