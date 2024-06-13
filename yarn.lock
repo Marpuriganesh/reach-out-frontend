@@ -1757,10 +1757,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@reach-out/ui-library@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.4.1.tgz#7f2e857b5a8891c747c3501d81fd10926fbdbafc"
-  integrity sha512-XrT3YP3imblZRblj/H6kIyuk4qTVv9QB/hr59iLT6Vne2gi84gKzdiMH+pFQnJyqOwbYaWaiBmLzKrJdCSbhkQ==
+"@reach-out/ui-library@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@reach-out/ui-library/-/ui-library-1.5.4.tgz#1be5a0ca4968e9d464fa0000def19c8273a121e3"
+  integrity sha512-0PhkttE2H/14/8hBf1E6NTj6yy4K59xW+fLwatG7WV3kSIKIWdp0jFnBGyjJVJ1uNvW/5KE68sd46xpflMfLug==
   dependencies:
     framer-motion "^11.0.8"
     lodash.throttle "^4.1.1"
