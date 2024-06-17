@@ -285,6 +285,7 @@ function LoginSignin() {
             className="input_text"
             exportInputValue={handleInputUsername}
             autoComplete="username"
+            name="username"
           />
           <CustomInput
             type="password"
@@ -292,6 +293,7 @@ function LoginSignin() {
             className="input_text"
             exportInputValue={handleInputPassword}
             autoComplete="current-password"
+            name="password"
           />
           <motion.button
             initial={{ scale: 1.5, opacity: 0 }}

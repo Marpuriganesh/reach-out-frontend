@@ -242,7 +242,6 @@
   display: none;
 }
 
-
 .container form {
   width: 100%;
   height: fit-content;
@@ -407,9 +406,12 @@ $numberOfWaves: 3;
 /* Large Desktops */
 @media (min-width: 1920px) {
   :root {
-    --signInLogo-scale: 90%;
+    --signInLogo-scale: 80%;
 
     --input_text-margin-top: 5%;
+  }
+  .container {
+    scale: 1.1;
   }
 }
 
@@ -428,6 +430,9 @@ $numberOfWaves: 3;
     --signInLogo-scale: 65%;
 
     --input_text-margin-top: 5%;
+  }
+  .container {
+    scale: 0.85;
   }
 }
 
@@ -509,11 +514,10 @@ $numberOfWaves: 3;
     .form-container {
       overflow-y: scroll;
     }
-    .motion-div{
+    .motion-div {
       padding: 0;
     }
   }
-
 
   .container::before {
     height: 100%;
@@ -534,8 +538,6 @@ $numberOfWaves: 3;
     width: 100dvw;
     height: 100dvh;
   }
-
-  
 
   :root {
     --container-height: 35.5rem;
