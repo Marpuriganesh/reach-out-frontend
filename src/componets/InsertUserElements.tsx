@@ -189,7 +189,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               placeholder="Username"
               className="input_text"
               exportInputValue={handleInputUsername}
-              autoComplete="off"
+              autoComplete="username"
+              name="username"
             />
           </motion.div>
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -199,6 +200,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               className="input_text"
               exportInputValue={handleInputPseudoUsername}
               autoComplete="off"
+              name="pseudo_name"
             />
           </motion.div>
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
@@ -208,6 +210,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               className={`input_text ${error ? "input_error" : ""}`}
               exportInputValue={handleInputPassword}
               autoComplete="new-password"
+              name="password"
+              minlength={8}
               onChange={() => {
                 setErrors(validatePassword(password, username));
               }}
@@ -220,6 +224,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               className="input_text "
               exportInputValue={handleRetypePassword}
               autoComplete="new-password"
+              name="retype_password"
+              minlength={8}
             />
           </motion.div>
 
