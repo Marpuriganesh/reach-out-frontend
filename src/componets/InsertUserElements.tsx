@@ -212,8 +212,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               autoComplete="new-password"
               name="password"
               minlength={8}
-              onChange={() => {
-                setErrors(validatePassword(password, username));
+              onChange={(e) => {
+                setErrors(validatePassword(e.target.value, username));
               }}
             />
           </motion.div>

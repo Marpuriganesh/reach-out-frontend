@@ -320,14 +320,14 @@ function LoginSignin() {
               </motion.div>
             )}
           </motion.button>
-          <span
+          {path === "/" && (<span
             className="a"
             onClick={() => {
               setPath("/signin");
             }}
           >
             Sign in
-          </span>
+          </span>)}
         </motion.form>
       </div>
     </>
