@@ -11,16 +11,18 @@ function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(initializeAuthState());
-  });
+  },[dispatch]);
 
   return (
-    <BrowserRouter basename="/">
-      <Routes>
-        <Route path="/home" element={<PageMain />} />
-        <Route path="/" element={<PageMain />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter basename="/">
+        <Routes>
+          <Route path="/home" element={<PageMain />} />
+          <Route path="/" element={<PageMain />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
