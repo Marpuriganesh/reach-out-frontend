@@ -6,17 +6,24 @@ import { useState, useEffect } from "react";
 
 function SplashScreen(): JSX.Element {
   const [playAnimation, setPlayAnimation] = useState(false);
+  const [exit, setExit] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setPlayAnimation(true);
     }, 400);
+    const searchParams = new URLSearchParams(location.search);
+    const codeParam = searchParams.get("code");
+    const error = searchParams.get("error");
+    if(codeParam || error) {
+      setExit(false);
+    }
   }, []);
 
   return (
     <motion.div
       className="SplashScreen"
-      exit={{ opacity: 0 }}
+      exit={exit?{ opacity: 0 }:{}}
       transition={{ duration: 0.3 }}
     >
       <motion.div className="SplashScreen_container">

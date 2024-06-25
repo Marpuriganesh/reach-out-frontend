@@ -34,8 +34,11 @@
       margin-top: var(--input_text-margin-top);
       width: 100%;
     }
-    .input_error{
+    .input_error {
       --input-color: red;
+    }
+    .input_disabled {
+      --input-color: #5d5c5c;
     }
     form {
       gap: 0.4rem;
@@ -53,14 +56,14 @@
       flex-direction: column;
       /* outline: 1px white dotted;
       outline-offset: 2px; */
-      .line{
+      .line {
         position: relative;
-        top:0;
-        span{
+        top: 0;
+        span {
           font-size: 0.7rem;
           width: fit-content;
           height: fit-content;
-          ul{
+          ul {
             margin: 0;
             padding: 0;
             display: flex;
@@ -71,10 +74,14 @@
             margin-bottom: 0.5rem;
           }
         }
-
       }
       button {
         margin-top: 1.5rem;
+      }
+      button:disabled {
+        background-color: #5d5c5c;
+        color: #292828;
+        cursor: not-allowed;
       }
       padding-top: 20%;
     }

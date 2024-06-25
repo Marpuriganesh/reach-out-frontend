@@ -21,12 +21,19 @@ function PageMain(): JSX.Element {
     } else {
       setRenderPage("/home");
     }
-  }, [location.pathname]);
+    const searchParams = new URLSearchParams(location.search);
+    const codeParam = searchParams.get("code");
+    const error = searchParams.get("error");
+
+    if (codeParam || error) {
+      setShowSplashScreen(false);
+    }
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     setTimeout(() => {
       setShowSplashScreen(false);
-    }, 3000);
+    }, 3500);
   }, []);
 
   return (

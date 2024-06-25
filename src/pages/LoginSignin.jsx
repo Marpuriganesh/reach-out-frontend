@@ -17,6 +17,7 @@ import { deviceType, osName, isMobile } from "react-device-detect";
 function LoginSignin() {
   const [scrollDisabled, setScrollDisabled] = useState(true);
   const [path, setPath] = useState("/");
+  // const [path, setPath] = useState("/insert");
   const isLogined = useSelector((state) => state.auth.isLogined);
   const refresh_token = useSelector((state) => state.auth.refresh_token);
   const auth_token = useSelector((state) => state.auth.auth_token);
