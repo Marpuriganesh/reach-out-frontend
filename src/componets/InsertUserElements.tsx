@@ -58,12 +58,19 @@ type disabling = {
   dis_retypePassword: boolean;
 };
 
-interface InputErrors {
+type InputErrors = {
   username: string[];
   pseudoName: string[];
   password: string[];
   retypePassword: string[];
-}
+};
+
+type inputLoadingType = {
+  loading_username: boolean;
+  loading_pseudoUsername: boolean;
+  // loading_password: boolean;
+  // loading_retypePassword: boolean;
+};
 
 const InsertUserElements: React.FC<InsertProps> = (Props) => {
   const [username, setUsername] = useState<string>("");
@@ -71,6 +78,12 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   const [password, setPassword] = useState<string>("");
   const [retypePassword, setRetypePassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [inputLoading, setInputLoading] = useState<inputLoadingType>({
+    loading_username: false,
+    loading_pseudoUsername: false,
+    // loading_password: false,
+    // loading_retypePassword: false,
+  });
   const [error, setError] = useState<boolean>(false);
   const [errors, setErrors] = useState<InputErrors>({
     username: [],
@@ -609,6 +622,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   }
 
   const checkUsername = () => {
+    setInputLoading({ ...inputLoading, loading_username: true });
     if (username !== "") {
       setDisabled({
         ...disabled,
@@ -647,6 +661,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
         console.error(error);
         setErrors({ ...errors, username: [] });
       });
+    setInputLoading({ ...inputLoading, loading_username: false });
   };
 
   return (
@@ -670,7 +685,9 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               type="text"
               placeholder="Username"
               className={`input_text ${
-                disabled.dis_username ? "input_disabled" : ""
+                disabled.dis_username && !inputLoading.loading_username
+                  ? "input_disabled"
+                  : ""
               } ${errors.username.length > 0 ? "input_error" : ""}`}
               exportInputValue={handleInputUsername}
               autoComplete="username"
@@ -685,7 +702,10 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               type="text"
               placeholder="Nickname"
               className={`input_text ${
-                disabled.dis_pseudoUsername ? "input_disabled" : ""
+                disabled.dis_pseudoUsername &&
+                !inputLoading.loading_pseudoUsername
+                  ? "input_disabled"
+                  : ""
               }`}
               exportInputValue={handleInputPseudoUsername}
               autoComplete="off"
