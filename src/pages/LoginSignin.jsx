@@ -410,7 +410,7 @@ function LoginSignin() {
       exit={{ y: "-100%", transition: { duration: 0.4 } }}
       style={{ height: "100%", width: "100%" }}
     >
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <motion.div key={isLogined} style={{ height: "100%", width: "100%" }}>
           {isLogined ? (
             <>
