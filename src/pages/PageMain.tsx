@@ -33,7 +33,7 @@ function PageMain(): JSX.Element {
   useEffect(() => {
     setTimeout(() => {
       setShowSplashScreen(false);
-    }, 3500);
+    }, 3000);
   }, []);
 
   return (

@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reach-out/ui-library": "^1.5.5",
+    "@reach-out/ui-library": "^1.6.0",
     "@reduxjs/toolkit": "^2.2.1",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.11.28",

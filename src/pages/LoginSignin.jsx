@@ -395,6 +395,9 @@ function LoginSignin() {
               speed={config.speed}
               frequency={config.frequency}
               className={`wave${index + 1}`} // Append index value to "wave"
+              initial={{ y: "100%" }}
+              animate={{ y: "0%" }}
+              transition={{ duration: 1, delay: 0.3 }}
             />
           ))}
         </div>

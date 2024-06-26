@@ -622,7 +622,6 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   }
 
   const checkUsername = () => {
-    setInputLoading({ ...inputLoading, loading_username: true });
     if (username !== "") {
       setDisabled({
         ...disabled,
@@ -631,7 +630,9 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
         dis_password: true,
         dis_retypePassword: true,
       });
+      setInputLoading({ ...inputLoading, loading_username: true });
     } else {
+      setInputLoading({ ...inputLoading, loading_username: false });
       setDisabled({ ...disabled, dis_username: false });
     }
     axios
@@ -645,6 +646,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
           dis_password: true,
           dis_retypePassword: true,
         });
+        setInputLoading({ ...inputLoading, loading_username: false });
         setErrors({
           ...errors,
           username: ["An user already exists with this username"],
@@ -658,10 +660,11 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
           dis_password: true,
           dis_retypePassword: true,
         });
+        setInputLoading({ ...inputLoading, loading_username: false });
+
         console.error(error);
         setErrors({ ...errors, username: [] });
       });
-    setInputLoading({ ...inputLoading, loading_username: false });
   };
 
   return (
