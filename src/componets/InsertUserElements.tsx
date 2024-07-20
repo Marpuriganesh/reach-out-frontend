@@ -73,6 +73,7 @@ type inputLoadingType = {
 };
 
 const InsertUserElements: React.FC<InsertProps> = (Props) => {
+  //MARK: States
   const [username, setUsername] = useState<string>("");
   const [pseudoUsername, setPseudoUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -93,10 +94,11 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   });
   const [disabled, setDisabled] = useState<disabling>({
     dis_username: false,
-    dis_pseudoUsername: true,
-    dis_password: true,
-    dis_retypePassword: true,
+    dis_pseudoUsername: false,
+    dis_password: false,
+    dis_retypePassword: false,
   });
+  const [disabledButton, setDisabledButton] = useState<boolean>(true);
 
   useEffect(() => {
     if (
@@ -111,9 +113,21 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
     }
   }, [errors]);
 
-  // src/passwordValidators.ts
+  useEffect(() => {
+    if (
+      username !== "" &&
+      pseudoUsername !== "" &&
+      password !== "" &&
+      retypePassword !== "" &&
+      !error
+    ) {
+      setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
+    }
+  }, [error, username, pseudoUsername, password, retypePassword]);
 
-  // A list of common passwords
+  //MARK: A list of common passwords
   const commonPasswords: string[] = [
     "123456",
     "password",
@@ -621,50 +635,100 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
       });
   }
 
-  const checkUsername = () => {
-    if (username !== "") {
-      setDisabled({
-        ...disabled,
-        dis_username: true,
-        dis_pseudoUsername: true,
-        dis_password: true,
-        dis_retypePassword: true,
-      });
-      setInputLoading({ ...inputLoading, loading_username: true });
-    } else {
-      setInputLoading({ ...inputLoading, loading_username: false });
-      setDisabled({ ...disabled, dis_username: false });
-    }
-    axios
-      .get(import.meta.env.VITE_CHECK_USER_URL + username + "/")
-      .then((response) => {
-        console.log(response);
+  //MARK: check username
+  // const checkUsername = () => {
+  //   if (username !== "") {
+  //     setDisabled({
+  //       ...disabled,
+  //       dis_username: true,
+  //       dis_pseudoUsername: true,
+  //       dis_password: true,
+  //       dis_retypePassword: true,
+  //     });
+  //     setInputLoading({ ...inputLoading, loading_username: true });
+  //   } else {
+  //     setInputLoading({ ...inputLoading, loading_username: false });
+  //     setDisabled({ ...disabled, dis_username: false });
+  //   }
+  //   axios
+  //     .get(import.meta.env.VITE_CHECK_USER_URL + username + "/")
+  //     .then((response) => {
+  //       console.log(response);
+  //       setDisabled({
+  //         ...disabled,
+  //         dis_username: false,
+  //         dis_pseudoUsername: true,
+  //         dis_password: true,
+  //         dis_retypePassword: true,
+  //       });
+  //       setInputLoading({ ...inputLoading, loading_username: false });
+  //       setErrors({
+  //         ...errors,
+  //         username: ["An user already exists with this username"],
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       setDisabled({
+  //         ...disabled,
+  //         dis_username: false,
+  //         dis_pseudoUsername: false,
+  //         dis_password: true,
+  //         dis_retypePassword: true,
+  //       });
+  //       setInputLoading({ ...inputLoading, loading_username: false });
+
+  //       console.error(error);
+  //       setErrors({ ...errors, username: [] });
+  //     });
+  // };
+  //MARK: handleBlur and handleFocus
+
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    switch (event.target.name) {
+      case "username":
         setDisabled({
           ...disabled,
-          dis_username: false,
           dis_pseudoUsername: true,
           dis_password: true,
           dis_retypePassword: true,
         });
-        setInputLoading({ ...inputLoading, loading_username: false });
-        setErrors({
-          ...errors,
-          username: ["An user already exists with this username"],
-        });
-      })
-      .catch((error) => {
+        break;
+      case "pseudo_name":
         setDisabled({
           ...disabled,
-          dis_username: false,
-          dis_pseudoUsername: false,
+          dis_username: true,
           dis_password: true,
           dis_retypePassword: true,
         });
-        setInputLoading({ ...inputLoading, loading_username: false });
-
-        console.error(error);
-        setErrors({ ...errors, username: [] });
-      });
+        break;
+      case "password":
+        setDisabled({
+          ...disabled,
+          dis_username: true,
+          dis_pseudoUsername: true,
+          dis_retypePassword: true,
+        });
+        break;
+      case "retype_password":
+        setDisabled({
+          ...disabled,
+          dis_username: true,
+          dis_pseudoUsername: true,
+          dis_password: true,
+        });
+        break;
+    }
+  };
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setDisabled({
+      ...disabled,
+      dis_username: false,
+      dis_pseudoUsername: false,
+      dis_password: false,
+      dis_retypePassword: false,
+    });
+    setInputLoading({ ...inputLoading, loading_username: false });
   };
 
   return (
@@ -682,7 +746,7 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
           className={loading ? "form" : ""}
         >
           <span>Fill in the details</span>
-
+          {/* MARK: inputs are defined here */}
           <motion.div style={{ width: "70%" }} variants={inputVariants}>
             <CustomInput
               type="text"
@@ -695,7 +759,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               exportInputValue={handleInputUsername}
               autoComplete="username"
               name="username"
-              onBlur={checkUsername}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               disabled={disabled.dis_username}
               loading={disabled.dis_username}
             />
@@ -713,6 +778,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               exportInputValue={handleInputPseudoUsername}
               autoComplete="off"
               name="pseudo_name"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               disabled={disabled.dis_pseudoUsername}
             />
           </motion.div>
@@ -726,6 +793,8 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               exportInputValue={handleInputPassword}
               autoComplete="new-password"
               name="password"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               minlength={8}
               onChange={(e) => {
                 setErrors((prevErrors) => ({
@@ -746,11 +815,13 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
               exportInputValue={handleRetypePassword}
               autoComplete="new-password"
               name="retype_password"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               minlength={8}
               disabled={disabled.dis_retypePassword}
             />
           </motion.div>
-
+          {/* //MARK: button-container */}
           <motion.div className="button_container">
             {error && (
               <motion.div className="line" variants={lineVariants}>
@@ -765,10 +836,11 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
                 </motion.span>
               </motion.div>
             )}
+            {/* //MARK: button */}
             <motion.button
               variants={buttonVariants}
               style={{ color: loading ? "transparent" : "" }}
-              disabled={error}
+              disabled={disabledButton}
             >
               Sign in
               {loading && (

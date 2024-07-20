@@ -2,7 +2,7 @@
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-
+//MARK: variables
 :root {
   --signInLogo-scale: 70%;
   --container-width: 22.9rem;
@@ -29,10 +29,10 @@
   --page-container-color: white;
   --page-container-bg-color: hsl(0, 0%, 2%);
   --container-border-color: rgba(255, 255, 255, 0.89);
-  --container-background: rgba(255, 255, 255, 0.072);
-  --button-color: #323232;
-  --button-hover-color: rgb(255, 255, 255);
-  --button-hover-bg-color: black;
+  --container-background: rgba(219, 219, 219, 0.072);
+  --button-color: #1a1a1a;
+  --button-hover-color: #d3d3d3;
+  --button-hover-bg-color: rgba(197, 197, 197, 0.288);
   --link-color: hsl(0, 0%, 93%);
   --link-hover-color: hsl(0, 0%, 100%);
   --line-bg-color: rgba(255, 255, 255, 0.929);
@@ -294,17 +294,25 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  outline: none;
+  box-shadow: none;
+  filter: none;
+  -webkit-filter: none;
 }
 
 .container form button:hover {
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,    outline 0.3s ease-in-out, box-shadow 0.3s ease-in-out,    filter 0.3s ease-in-out;
   color: var(--button-hover-color);
   background-color: var(--button-hover-bg-color);
+  outline: 1px solid rgba(255, 255, 255, 0.74);
+  box-shadow: 0 0 15px 1px rgba(221, 221, 221, 0.288);
+  filter: drop-shadow(0 0 10px rgba(221, 221, 221, 0.274));
   cursor: pointer;
   -webkit-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -moz-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -ms-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -o-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  -webkit-filter: drop-shadow(0 0 10px rgba(221, 221, 221, 0.274));
 }
 
 .container form button:hover > div .loading {
@@ -402,6 +410,7 @@ $numberOfWaves: 3;
 }
 
 /* ======================================= */
+//MARK: media rules
 
 /* Large Desktops */
 @media (min-width: 1920px) {

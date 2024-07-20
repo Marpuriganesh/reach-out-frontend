@@ -15,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import { deviceType, osName, isMobile } from "react-device-detect";
 
 function LoginSignin() {
+  // MARK: - States
   const [scrollDisabled, setScrollDisabled] = useState(true);
   const [path, setPath] = useState("/");
   // const [path, setPath] = useState("/insert");
@@ -198,6 +199,8 @@ function LoginSignin() {
     };
   }, [scrollDisabled]);
 
+  //MARK: SIGNUP
+
   const formSingup = (
     <>
       <div className="signin">
@@ -222,7 +225,7 @@ function LoginSignin() {
       </div>
     </>
   );
-
+  //MARK: LOGIN
   const formLogin = (
     <>
       <motion.div
@@ -325,6 +328,7 @@ function LoginSignin() {
             <span
               className="a"
               onClick={() => {
+                setError(false);
                 setPath("/signin");
               }}
             >
