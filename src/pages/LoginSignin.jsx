@@ -340,78 +340,106 @@ function LoginSignin() {
     </>
   );
 
+  //MARK: page varients
+
+  const mainPageVarients = {
+    hidden: {},
+    visible: {},
+    exit: {},
+  };
+
+  const baseHolderVarients = {
+    hidden: { y: "-100%" },
+    visible: { y: "0%", transition: { duration: 0.5 } },
+    exit: { y: "-100%", transition: { duration: 0.5} },
+  };
+
+  const waveVarients = {
+    hidden: { y: "100%" },
+    visible: { y: "0%", transition: { duration: 1 } },
+    exit: { y: "100%", transition: { duration: 0.5 } },
+  };
+
+  //MARK: Total page holder
   const login_sigin = (
     <>
-      <motion.div
-        initial={{ y: "-100%" }}
-        animate={{ y: "0%" }}
-        transition={{ duration: 0.5 }}
-        exit={{ y: "-100%", transition: { duration: 0.4 } }}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <NavBar className="nav-bar" />
-        <div className={`page-container `}>
-          <motion.div
-            className={`container ${error ? "blink" : ""}`}
-            style={{
-              rotateY:
-                path === "/signin"
-                  ? "-180deg"
-                  : path === "/insert"
-                  ? "-360deg"
-                  : path === "/loginafterinsert"
-                  ? "-180deg"
-                  : "0deg",
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={path}
-                className="motion-div"
-                style={{
-                  transform: `${
-                    path === "/loginafterinsert" ? "rotateY(180deg)" : "none"
-                  }`,
-                }}
-              >
-                {path === "/signin" ? (
-                  formSingup
-                ) : path === "/insert" ? (
-                  <>
-                    <InsertUserElements
-                      provider={provider}
-                      provider_auth_token={provider_auth_token}
-                      changePath={changePath}
-                    />
-                  </>
-                ) : (
-                  formLogin
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-          {/* Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
+      <motion.div style={{ height: "100%", width: "100%" }}>
+        <motion.div
+          variants={baseHolderVarients}
+          style={{ height: "100%", width: "100%", zIndex: 10 }}
+        >
+          <NavBar className="nav-bar" />
+          <div className={`page-container `} style={{ zIndex: 10 }}>
+            <motion.div
+              className={`container ${error ? "blink" : ""}`}
+              style={{
+                rotateY:
+                  path === "/signin"
+                    ? "-180deg"
+                    : path === "/insert"
+                    ? "-360deg"
+                    : path === "/loginafterinsert"
+                    ? "-180deg"
+                    : "0deg",
+              }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={path}
+                  className="motion-div"
+                  style={{
+                    transform: `${
+                      path === "/loginafterinsert" ? "rotateY(180deg)" : "none"
+                    }`,
+                  }}
+                >
+                  {path === "/signin" ? (
+                    formSingup
+                  ) : path === "/insert" ? (
+                    <>
+                      <InsertUserElements
+                        provider={provider}
+                        provider_auth_token={provider_auth_token}
+                        changePath={changePath}
+                      />
+                    </>
+                  ) : (
+                    formLogin
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </motion.div>
+        <motion.div className="waves">
+          {/* MARK: Map over the waveConfigs array and render AnimatedWave component with respective attributes */}
           {waveConfigs.map((config, index) => (
-            <AnimatedWave
+            <motion.div
               key={index} // Remember to provide a unique key for each component in the array
-              phase={config.phase}
-              amplitude={config.amplitude}
-              speed={config.speed}
-              frequency={config.frequency}
-              className={`wave${index + 1}`} // Append index value to "wave"
-              initial={{ y: "100%" }}
-              animate={{ y: "0%" }}
-              transition={{ duration: 1, delay: 0.3 }}
-            />
+              className={`wave${index + 1}`}
+              variants={waveVarients}
+            >
+              <AnimatedWave
+                key={index} // Remember to provide a unique key for each component in the array
+                phase={config.phase}
+                amplitude={config.amplitude}
+                speed={config.speed}
+                frequency={config.frequency}
+                className="innerWave"
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </motion.div>
     </>
   );
-
+  //MARK: render
   return (
     <motion.div
-      exit={{ y: "-100%", transition: { duration: 0.4 } }}
+      variants={mainPageVarients}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
       style={{ height: "100%", width: "100%" }}
     >
       <AnimatePresence mode="wait">
