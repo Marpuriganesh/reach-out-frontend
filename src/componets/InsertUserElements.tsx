@@ -94,9 +94,9 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   });
   const [disabled, setDisabled] = useState<disabling>({
     dis_username: false,
-    dis_pseudoUsername: false,
-    dis_password: false,
-    dis_retypePassword: false,
+    dis_pseudoUsername: true,
+    dis_password: true,
+    dis_retypePassword: true,
   });
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
 
@@ -636,8 +636,56 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   }
 
   //MARK: check username
-  // const checkUsername = () => {
-  //   if (username !== "") {
+  const checkUsername = () => {
+    if (username !== "") {
+      setDisabled({
+        ...disabled,
+        dis_username: true,
+        dis_pseudoUsername: true,
+        dis_password: true,
+        dis_retypePassword: true,
+      });
+      setInputLoading({ ...inputLoading, loading_username: true });
+      axios
+      .get(import.meta.env.VITE_CHECK_USER_URL + username + "/")
+      .then((response) => {
+        console.log(response);
+        setDisabled({
+          ...disabled,
+          dis_username: false,
+          dis_pseudoUsername: true,
+          dis_password: true,
+          dis_retypePassword: true,
+        });
+        setInputLoading({ ...inputLoading, loading_username: false });
+        setErrors({
+          ...errors,
+          username: ["An user already exists with this username"],
+        });
+      })
+      .catch((error) => {
+        setDisabled({
+          ...disabled,
+          dis_username: false,
+          dis_pseudoUsername: false,
+          dis_password: true,
+          dis_retypePassword: true,
+        });
+        setInputLoading({ ...inputLoading, loading_username: false });
+
+        console.error(error);
+        setErrors({ ...errors, username: [] });
+      });
+    } else {
+      setInputLoading({ ...inputLoading, loading_username: false });
+      setDisabled({ ...disabled, dis_username: false });
+    }
+
+  };
+
+
+  // const checkPseudoUsername = () => {
+  //   if (pseudoUsername !== "") {
   //     setDisabled({
   //       ...disabled,
   //       dis_username: true,
@@ -645,13 +693,9 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   //       dis_password: true,
   //       dis_retypePassword: true,
   //     });
-  //     setInputLoading({ ...inputLoading, loading_username: true });
-  //   } else {
-  //     setInputLoading({ ...inputLoading, loading_username: false });
-  //     setDisabled({ ...disabled, dis_username: false });
-  //   }
-  //   axios
-  //     .get(import.meta.env.VITE_CHECK_USER_URL + username + "/")
+  //     setInputLoading({ ...inputLoading, loading_pseudoUsername: true });
+  //     axios
+  //     .get(import.meta.env.VITE_CHECK_PSEUDO_NAME_URL + pseudoUsername + "/")
   //     .then((response) => {
   //       console.log(response);
   //       setDisabled({
@@ -661,10 +705,10 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   //         dis_password: true,
   //         dis_retypePassword: true,
   //       });
-  //       setInputLoading({ ...inputLoading, loading_username: false });
+  //       setInputLoading({ ...inputLoading, loading_pseudoUsername: false });
   //       setErrors({
   //         ...errors,
-  //         username: ["An user already exists with this username"],
+  //         username: ["An user already exists with this Nickname"],
   //       });
   //     })
   //     .catch((error) => {
@@ -675,60 +719,93 @@ const InsertUserElements: React.FC<InsertProps> = (Props) => {
   //         dis_password: true,
   //         dis_retypePassword: true,
   //       });
-  //       setInputLoading({ ...inputLoading, loading_username: false });
+  //       setInputLoading({ ...inputLoading, loading_pseudoUsername: false });
 
   //       console.error(error);
   //       setErrors({ ...errors, username: [] });
   //     });
+  //   } else {
+  //     setInputLoading({ ...inputLoading, loading_pseudoUsername: false });
+  //     setDisabled({ ...disabled, dis_pseudoUsername: false });
+  //   }
+
   // };
+
+
+
   //MARK: handleBlur and handleFocus
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    switch (event.target.name) {
-      case "username":
-        setDisabled({
-          ...disabled,
-          dis_pseudoUsername: true,
-          dis_password: true,
-          dis_retypePassword: true,
-        });
-        break;
-      case "pseudo_name":
-        setDisabled({
-          ...disabled,
-          dis_username: true,
-          dis_password: true,
-          dis_retypePassword: true,
-        });
-        break;
-      case "password":
-        setDisabled({
-          ...disabled,
-          dis_username: true,
-          dis_pseudoUsername: true,
-          dis_retypePassword: true,
-        });
-        break;
-      case "retype_password":
-        setDisabled({
-          ...disabled,
-          dis_username: true,
-          dis_pseudoUsername: true,
-          dis_password: true,
-        });
-        break;
+    if (
+      password !== "" &&
+      retypePassword !== "" &&
+      pseudoUsername !== "" &&
+      username !== ""
+    ) {
+      switch (event.target.name) {
+        case "username":
+          setDisabled({
+            ...disabled,
+            dis_pseudoUsername: true,
+            dis_password: true,
+            dis_retypePassword: true,
+          });
+          break;
+        case "pseudo_name":
+          setDisabled({
+            ...disabled,
+            dis_username: true,
+            dis_password: true,
+            dis_retypePassword: true,
+          });
+          break;
+        case "password":
+          setDisabled({
+            ...disabled,
+            dis_username: true,
+            dis_pseudoUsername: true,
+            dis_retypePassword: true,
+          });
+          break;
+        case "retype_password":
+          setDisabled({
+            ...disabled,
+            dis_username: true,
+            dis_pseudoUsername: true,
+            dis_password: true,
+          });
+          break;
+      }
     }
   };
+
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setDisabled({
-      ...disabled,
-      dis_username: false,
-      dis_pseudoUsername: false,
-      dis_password: false,
-      dis_retypePassword: false,
-    });
-    setInputLoading({ ...inputLoading, loading_username: false });
+    console.log("on blur",event.target.name);
+
+    switch (event.target.name) {
+      case "username":
+        
+        checkUsername();
+        break;
+      case "pseudo_name":
+        setInputLoading({ ...inputLoading, loading_pseudoUsername: true });
+        break;
+    }
+
+    if (
+      password !== "" &&
+      retypePassword !== "" &&
+      pseudoUsername !== "" &&
+      username !== ""
+    ) {
+      setDisabled({
+        ...disabled,
+        dis_username: false,
+        dis_pseudoUsername: false,
+        dis_password: false,
+        dis_retypePassword: false,
+      });
+    }
   };
 
   return (
