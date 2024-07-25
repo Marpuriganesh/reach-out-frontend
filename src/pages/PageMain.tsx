@@ -47,6 +47,7 @@ function PageMain(): JSX.Element {
             style={{ height: "100%", width: "100%" }}
           >
             {renderPage === "/" && <LoginSignin />}
+
             {renderPage === "/home" && <Home />}
           </motion.div>
         )}

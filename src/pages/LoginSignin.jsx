@@ -11,7 +11,7 @@ import { login, logoutAsync } from "../auth_state/authSlice";
 import axios from "axios";
 import { ScaleLoader, BarLoader } from "react-spinners";
 import InsertUserElements from "../componets/InsertUserElements";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { deviceType, osName, isMobile } from "react-device-detect";
 
 function LoginSignin() {
@@ -32,6 +32,7 @@ function LoginSignin() {
   const user = useSelector((state) => state.auth.user);
   const [error, setError] = useState(false);
   const [errorType, setErrorType] = useState("");
+  const navigate = useNavigate();
 
   //debug
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -351,7 +352,7 @@ function LoginSignin() {
   const baseHolderVarients = {
     hidden: { y: "-100%" },
     visible: { y: "0%", transition: { duration: 0.5 } },
-    exit: { y: "-100%", transition: { duration: 0.5} },
+    exit: { y: "-100%", transition: { duration: 0.5 } },
   };
 
   const waveVarients = {
@@ -436,14 +437,21 @@ function LoginSignin() {
   //MARK: render
   return (
     <motion.div
-      variants={mainPageVarients}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
       style={{ height: "100%", width: "100%" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
     >
       <AnimatePresence mode="wait">
-        <motion.div key={isLogined} style={{ height: "100%", width: "100%" }}>
+        <motion.div
+          key={isLogined}
+          style={{ height: "100%", width: "100%" }}
+          variants={mainPageVarients}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
           {isLogined ? (
             <>
               <div>dashbord | </div>

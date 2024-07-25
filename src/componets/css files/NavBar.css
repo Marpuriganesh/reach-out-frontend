@@ -9,6 +9,25 @@ li{
     text-decoration: none;
     font-family:  Helvetica;
     color: white;
+    svg{
+        fill: black;
+        transition: fill 0.2s ease-in-out;
+        -webkit-transition: fill 0.2s ease-in-out;
+        -moz-transition: fill 0.2s ease-in-out;
+        -ms-transition: fill 0.2s ease-in-out;
+        -o-transition: fill 0.2s ease-in-out;
+}
+    #fill{
+        fill: white;
+    }
+
+    svg:hover{
+        fill: white;
+    }
+
+    svg:hover>#fill{
+        fill: black;
+    }
 
 }
 
