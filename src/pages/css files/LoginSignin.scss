@@ -43,6 +43,8 @@
   --lightnessMultiplier: 4;
 }
 
+
+
 .page-container {
   width: 100%;
   height: 100%;
@@ -58,9 +60,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.page-container {
-  background-color: var(--page-container-bg-color);
-}
+
 
 .nav-bar {
   width: 100%;
@@ -301,7 +301,9 @@
 }
 
 .container form button:hover {
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,    outline 0.3s ease-in-out, box-shadow 0.3s ease-in-out,    filter 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,
+    outline 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    filter 0.3s ease-in-out;
   color: var(--button-hover-color);
   background-color: var(--button-hover-bg-color);
   outline: 1px solid rgba(255, 255, 255, 0.74);
@@ -373,7 +375,15 @@
     color: rgba(255, 255, 255, 0.558);
   }
 }
-
+//MARK: waves
+.waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 // Define the number of waves
 $numberOfWaves: 3;
 
@@ -386,6 +396,11 @@ $numberOfWaves: 3;
     height: #{20vh * $i}; // Increase height for each subsequent wave
     overflow: hidden;
 
+    .innerWave {
+      width: 100%;
+      height: 100%;
+
+    }
     svg {
       width: 100%;
       height: 100%;
@@ -406,6 +421,7 @@ $numberOfWaves: 3;
     }
     z-index: $numberOfWaves - $i + 1;
     pointer-events: none;
+
   }
 }
 
